@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">StalledPrototype</string>
+    <string name="title_activity_main">Map</string>
+    <string name="title_activity_display_bathroom">DisplayBathroom</string>
+</resources>

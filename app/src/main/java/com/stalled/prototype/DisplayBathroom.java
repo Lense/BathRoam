@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.stalled.prototype.stalledprototype.R;
+import com.stalled.prototype.R;
 
 public class DisplayBathroom extends AppCompatActivity {
 

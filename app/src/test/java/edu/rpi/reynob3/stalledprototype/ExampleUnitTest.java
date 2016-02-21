@@ -1,4 +1,4 @@
-package edu.rpi.reynob3.stalledprototype;
+package com.stalled.prototype.stalledprototype;
 
 import org.junit.Test;
 

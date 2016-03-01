@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent1 = new Intent(MainActivity.this, DisplayBathroom.class);
+                Intent intent1 = new Intent(MainActivity.this, DrilldownActivity.class);
                 String title = marker.getTitle();
                 intent1.putExtra("markertitle", title);
                 startActivity(intent1);
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://edu.rpi.reynob3.stalledprototype/http/host/path")
+                Uri.parse("android-app://com.stalled.prototype/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();

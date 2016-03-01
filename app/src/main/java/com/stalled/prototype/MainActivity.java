@@ -3,6 +3,8 @@ package com.stalled.prototype;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 float myFloat = (float) progress + 2;
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(myFloat));
             }
+
         });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -68,6 +71,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "This will launch new Bathroom Activity", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override

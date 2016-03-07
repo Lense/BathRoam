@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:background="@drawable/ancientRome">
+            android:background="@drawable/ancient_rome">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

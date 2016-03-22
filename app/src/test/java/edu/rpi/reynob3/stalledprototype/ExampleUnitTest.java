@@ -1,4 +1,4 @@
-package com.stalled.prototype.stalledprototype;
+package com.stalled.bathroam.stalledprototype;
 
 import org.junit.Test;
 

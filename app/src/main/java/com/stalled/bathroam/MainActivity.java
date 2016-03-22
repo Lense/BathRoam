@@ -1,4 +1,4 @@
-package com.stalled.prototype;
+package com.stalled.bathroam;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.stalled.prototype/http/host/path")
+                Uri.parse("android-app://com.stalled.bathroam/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);
     }
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.stalled.prototype/http/host/path")
+                Uri.parse("android-app://com.stalled.bathroam/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();

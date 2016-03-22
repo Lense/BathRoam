@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">StalledPrototype</string>
+    <string name="app_name">BathRoam</string>
     <string name="title_activity_main">Map</string>
-    <string name="title_activity_display_bathroom">DisplayBathroom</string>
-    <string name="title_activity_drilldown">DrilldownActivity</string>
+    <string name="title_activity_display_bathroom">Bathroom</string>
+    <string name="title_activity_drilldown">Bathroom</string>
     <string name="large_text">
         "Temporary Text.\n\n"
 

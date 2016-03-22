@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.stalled.prototype/http/host/path")
+                Uri.parse("android-app://edu.rpi.reynob3.stalledprototype/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);
     }

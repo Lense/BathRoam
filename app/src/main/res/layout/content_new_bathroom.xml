@@ -74,7 +74,7 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pit Toiler"
+                    android:text="Pit Toilet"
                     android:id="@+id/potToilet"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"

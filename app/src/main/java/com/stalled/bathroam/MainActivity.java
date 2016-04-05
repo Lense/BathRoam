@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMarker = mMap.addMarker(new MarkerOptions().position(RPI).title("RPI"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RPI, 18));
 
-
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {

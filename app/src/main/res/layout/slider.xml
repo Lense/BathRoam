@@ -16,7 +16,7 @@
 
     <SeekBar
         android:id="@+id/zoom"
-        android:max="19"
+        android:max="5"
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:layout_gravity="right" />

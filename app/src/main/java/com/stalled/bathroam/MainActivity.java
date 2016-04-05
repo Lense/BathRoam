@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -18,20 +22,27 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private SeekBar zoom_level;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+    private SeekBar min_rating_slider;
+    private int min_rating;
+    private Marker mMarker;
     private GoogleApiClient client;
-    View.OnClickListener runNewBathroom;
+    private ArrayList<Bathroom> local_bathrooms = new ArrayList<Bathroom>();
+    private static final String TAG = "MapActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +55,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
 
-        zoom_level = (SeekBar) findViewById(R.id.zoom);
-        zoom_level.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        min_rating = 0;
+        min_rating_slider = (SeekBar) findViewById(R.id.zoom);
+        min_rating_slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -58,9 +70,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
             @Override
-            public void onProgressChanged(SeekBar zoom_level, int progress, boolean fromUser) {
-                float myFloat = (float) progress + 2;
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(myFloat));
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                min_rating = progress;
+                mMap.clear();
+                for(int i=0; i < local_bathrooms.size(); i++) {
+                    Bathroom this_bathroom = local_bathrooms.get(i);
+                    if(this_bathroom.getRating() > min_rating){
+                        mMarker = mMap.addMarker(new MarkerOptions().position(this_bathroom.getLocation()).title(String.valueOf(this_bathroom.getRating())));
+                    }
+                }
             }
 
         });
@@ -81,11 +99,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent1);
             }
         });
+
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        // Create a sample marker when the map is ready
+        LatLng RPI = new LatLng(42.730160, -73.678814);
+        mMarker = mMap.addMarker(new MarkerOptions().position(RPI).title("RPI"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RPI, 18));
+
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -97,10 +123,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        // Add a marker in Sydney and move the camera
-        LatLng RPI = new LatLng(42.730160, -73.678814);
-        mMap.addMarker(new MarkerOptions().position(RPI).title("RPI"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(RPI));
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+
+                // Build the URL for the request
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("http")
+                        .authority("104.131.49.58")
+                        .appendPath("api")
+                        .appendPath("bathrooms")
+                        .appendPath("nearby")
+                        .appendQueryParameter("ne_lat", String.valueOf(bounds.northeast.latitude))
+                        .appendQueryParameter("ne_long", String.valueOf(bounds.northeast.longitude))
+                        .appendQueryParameter("sw_lat", String.valueOf(bounds.southwest.latitude))
+                        .appendQueryParameter("sw_long", String.valueOf(bounds.southwest.longitude));
+                String url = builder.build().toString();
+                GetLocalBathrooms(url);
+
+            }
+
+        });
+
     }
 
     @Override
@@ -142,4 +188,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
+    private void GetLocalBathrooms(String url) {
+
+        JsonArrayRequest jsArrReq = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>(){
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jo = response.getJSONObject(i);
+                        int id = jo.getInt("id");
+                        JSONArray location = jo.getJSONArray("loc");
+                        Double lat = (Double)location.get(0);
+                        Double lon = (Double)location.get(1);
+                        Double rating = jo.getDouble("rating");
+                        Bathroom new_bathroom = new Bathroom(id, lat, lon, rating);
+                        if(rating > min_rating && !local_bathrooms.contains(new_bathroom)) {
+                            local_bathrooms.add(new_bathroom);
+                            mMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(String.valueOf(rating)));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.w(TAG, error);
+            }
+        });
+
+        RequestHandler.getInstance().addToReqQueue(jsArrReq, "jreq", getApplicationContext());
+    }
+
+
 }

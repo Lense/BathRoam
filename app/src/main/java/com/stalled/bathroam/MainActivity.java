@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private SeekBar min_rating_slider;
-    private int min_rating;
+    private float min_rating;
     private Marker mMarker;
     private GoogleApiClient client;
     private ArrayList<Bathroom> local_bathrooms = new ArrayList<Bathroom>();
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mActionBar.setDisplayShowCustomEnabled(true);
 
         min_rating = 0;
-        min_rating_slider = (SeekBar) findViewById(R.id.zoom);
+        min_rating_slider = (SeekBar) findViewById(R.id.rating);
         min_rating_slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                min_rating = progress;
+                min_rating = (float)progress/10;
                 mMap.clear();
                 for(int i=0; i < local_bathrooms.size(); i++) {
                     Bathroom this_bathroom = local_bathrooms.get(i);
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mMarker = mMap.addMarker(new MarkerOptions().position(this_bathroom.getLocation()).title(String.valueOf(this_bathroom.getRating())));
                     }
                 }
+                TextView textView = (TextView) findViewById(R.id.rating_value);
+                textView.setText(String.valueOf(min_rating));
             }
 
         });

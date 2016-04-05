@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker mMarker;
     private GoogleApiClient client;
     private ArrayList<Bathroom> local_bathrooms = new ArrayList<Bathroom>();
+
+    // Will added this
+    private boolean DepartedForNewBathroom = false;
+
     private static final String TAG = "MapActivity";
 
     @Override
@@ -98,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DepartedForNewBathroom = true;
                 Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
                 startActivity(intent1);
             }
@@ -189,6 +195,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ( DepartedForNewBathroom ) {
+            DepartedForNewBathroom = false;
+            Snackbar.make(findViewById(R.id.fab),
+                    "Thank you for your submission!",
+                    Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     private void GetLocalBathrooms(String url) {

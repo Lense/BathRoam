@@ -22,7 +22,6 @@ public class NewBathroomActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.util.Log.d("Hello","World");
                 NewBathroomActivity.this.finish();
             }
         });

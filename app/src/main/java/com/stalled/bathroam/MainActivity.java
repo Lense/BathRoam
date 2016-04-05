@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient mClient;
     private static final String TAG = "MapActivity";
     private LatLng mLastLocation;
+    private Bathroom mNearestBathroom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,13 +116,34 @@ public class MainActivity extends AppCompatActivity implements
         } else
             Toast.makeText(this, "Not connected...", Toast.LENGTH_SHORT).show();
 
-        // Set the FAB to open the new bathroom activity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // Set the intent for the new bathroom FAB
+        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.new_bathroom_fab);
+        fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
                 startActivity(intent1);
+            }
+        });
+
+        // Set the intent for the find nearest bathroom FAB
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.nearest_bathroom_fab);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Build the URL for the request
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("http")
+                        .authority("104.131.49.58")
+                        .appendPath("api")
+                        .appendPath("bathrooms")
+                        .appendPath("nearest")
+                        .appendQueryParameter("lat", String.valueOf(mLastLocation.latitude))
+                        .appendQueryParameter("lon", String.valueOf(mLastLocation.longitude));
+                String url = builder.build().toString();
+                findNearestBathroom(url);
+                mMap.addMarker(new MarkerOptions().position(mNearestBathroom.getLocation()).title(String.valueOf(mNearestBathroom.getRating())));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mNearestBathroom.getLocation(), 18));
             }
         });
 
@@ -258,5 +281,32 @@ public class MainActivity extends AppCompatActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+    private void findNearestBathroom(String url) {
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    // Parse the JSON object for bathroom information
+                    int id = response.getInt("id");
+                    JSONArray locArray = response.getJSONArray("loc");
+                    Double lat = (Double)locArray.get(0);
+                    Double lon = (Double)locArray.get(1);
+                    LatLng loc = new LatLng(lat, lon);
+                    float rating = (float) response.getDouble("rating");
+                    mNearestBathroom = new Bathroom(id, loc, rating);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.w(TAG, error);
+            }
+        });
+
+        RequestHandler.getInstance().addToReqQueue(jsObjReq, "jreq", getApplicationContext());
     }
 }

@@ -5,11 +5,11 @@ import com.google.android.gms.maps.model.LatLng;
 public class Bathroom {
     private int id;
     private LatLng location;
-    private double rating;
+    private float rating;
 
-    public Bathroom(int _id, double _latitutde, double _longitude, double _rating) {
+    public Bathroom(int _id, LatLng _location, float _rating) {
         id = _id;
-        location = new LatLng(_latitutde, _longitude);
+        location = _location;
         rating = _rating;
     }
 

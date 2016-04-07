@@ -28,8 +28,8 @@ public class NewBathroomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Bundle extra = getIntent().getExtras();
-        final double Lat = extra.getFloat("Lat");
-        final double Lon = extra.getFloat("Lon");
+        final double Lat = extra.getDouble("lat");
+        final double Lon = extra.getDouble("lon");
 
         setContentView(R.layout.activity_new_bathroom);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -67,42 +67,35 @@ public class NewBathroomActivity extends AppCompatActivity {
                 else if ( genderid == R.id.genderNeutral )
                     genderSelected = "neutral";
 
-                float noveltyStars = (float) novelty.getNumStars();
-                float kleeneStars = (float) cleanliness.getNumStars();
+                float noveltyStars = novelty.getRating();
+                float kleeneStars = cleanliness.getRating();
 
                 String content = "";
 
                 // currently available
-                content += "lat="+Double.toString(Lat)+"\n";
-                content += "lon="+Double.toString(Lon)+"\n";
-                content += "class="+classSelected+"\n";
-                content += "gender="+genderSelected+"\n";
-                content += "novelty="+Float.toString(noveltyStars)+"\n";
-                content += "cleanliness="+Float.toString(kleeneStars)+"\n";
-                content += "floor=0\n";
-                content += "public="+((privateBathroom.isChecked())?("false"):("true"))+"\n";
+                content += "lat="+Double.toString(Lat)+"&";
+                content += "lon="+Double.toString(Lon)+"&";
+                content += "class="+classSelected+"&";
+                content += "gender="+genderSelected+"&";
+                content += "novelty="+Float.toString(noveltyStars)+"&";
+                content += "cleanliness="+Float.toString(kleeneStars)+"&";
+                content += "floor=0&";
+                content += "public="+((privateBathroom.isChecked())?("False"):("True"))+"&";
 
                 // must use defaults
-                content += "paper=false\n";
-                content += "dryers=false\n";
-                content += "stalls=0\n";
-                content += "handicap=false\n";
-                content += "sinks=0\n";
-                content += "sanitizer=false\n";
-                content += "baby=false\n";
-                content += "urinals=0\n";
-                content += "feminine=false\n";
-                content += "medicine=false\n";
-                content += "contraceptive=false\n";
+                content += "paper=False&";
+                content += "dryers=False&";
+                content += "stalls=0&";
+                content += "handicap=False&";
+                content += "sinks=0&";
+                content += "sanitizer=False&";
+                content += "baby=False&";
+                content += "urinals=0&";
+                content += "feminine=False&";
+                content += "medicine=False&";
+                content += "contraceptive=False";
 
-                Uri.Builder builder = new Uri.Builder();
-                builder.scheme("http")
-                        .authority("104.131.49.58")
-                        .appendPath("api")
-                        .appendPath("bathrooms")
-                        .appendPath("create");
-
-                new UploadBathroomTask().execute(builder.build().toString(), content);
+                new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/create", content);
 
                 NewBathroomActivity.this.finish();
             }

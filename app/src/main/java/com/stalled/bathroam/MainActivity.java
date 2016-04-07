@@ -40,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements
     OnMapReadyCallback,
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = "MapActivity";
     private LatLng mLastLocation;
     private Bathroom mNearestBathroom;
+    private HashMap<String, Bathroom> mBathroomMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements
 
                 // Only display bathrooms meeting the minimum rating requirement
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
+                if (mLastLocation != null)
+                    mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
                 for (int i = 0; i < mLocalBathrooms.size(); i++) {
                     Bathroom bathroom = mLocalBathrooms.get(i);
                     if (bathroom.getRating() >= mMinRating) {
@@ -137,15 +140,23 @@ public class MainActivity extends AppCompatActivity implements
                         .authority("104.131.49.58")
                         .appendPath("api")
                         .appendPath("bathrooms")
-                        .appendPath("nearest")
-                        .appendQueryParameter("lat", String.valueOf(mLastLocation.latitude))
-                        .appendQueryParameter("lon", String.valueOf(mLastLocation.longitude));
+                        .appendPath("nearest");
+                if (mLastLocation != null) {
+                    builder.appendQueryParameter("lat", String.valueOf(mLastLocation.latitude))
+                            .appendQueryParameter("lon", String.valueOf(mLastLocation.longitude));
+                } else {
+                    builder.appendQueryParameter("lat", "0")
+                            .appendQueryParameter("lon", "0");
+                }
                 String url = builder.build().toString();
                 findNearestBathroom(url);
+                if (mNearestBathroom == null) {
+                    Toast.makeText(getApplicationContext(), "No restrooms were found nearby", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 mMap.addMarker(new MarkerOptions().position(mNearestBathroom.getLocation()).title(String.valueOf(mNearestBathroom.getRating())));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mNearestBathroom.getLocation(), 18));
-            }
-        });
+        }});
 
     }
 
@@ -153,19 +164,39 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mBathroomMap = new HashMap<>();
+if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
 
+        } else {
+
+        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
+        if (myLocation != null) {
+            mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
+            mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
+            Log.d(TAG, "AT "+mLastLocation.toString());
+        } else {Log.d(TAG, "COULDNT LOCATE");} }
         // Open the bathroom drilldown when a marker is clicked
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 Intent intent1 = new Intent(MainActivity.this, DrilldownActivity.class);
                 String title = marker.getTitle();
-                intent1.putExtra("markertitle", title);
+                intent1.putExtra("markerTitle", title);
+                intent1.putExtra("bathroomID", mBathroomMap.get(marker.getId()).getID());
                 startActivity(intent1);
             }
         });
 
         // Check for more bathrooms when the camera is moved
+        // http://stackoverflow.com/questions/21242104/is-there-a-way-to-tell-when-the-camera-in-a-google-map-fragment-stops-moving
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
@@ -185,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements
                 GetLocalBathrooms(url);
             }
         });
+
 
     }
 
@@ -222,7 +254,10 @@ public class MainActivity extends AppCompatActivity implements
                         if(!mLocalBathrooms.contains(newBathroom)){
                             mLocalBathrooms.add(newBathroom);
                             if(rating >= mMinRating){
+                                Marker tmp =
                                 mMap.addMarker(new MarkerOptions().position(loc).title(String.valueOf(rating)));
+
+                                mBathroomMap.put(tmp.getId(), newBathroom);
                             }
                         }
 
@@ -230,10 +265,12 @@ public class MainActivity extends AppCompatActivity implements
                         e.printStackTrace();
                     }
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Failed to connect...", Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);
             }
         });
@@ -261,7 +298,8 @@ public class MainActivity extends AppCompatActivity implements
             mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
             mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
-        }
+            Log.d(TAG, "AT "+mLastLocation.toString());
+        } else {Log.d(TAG, "COULDNT LOCATE");}
 
     }
 
@@ -298,6 +336,7 @@ public class MainActivity extends AppCompatActivity implements
                     mNearestBathroom = new Bathroom(id, loc, rating);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    mNearestBathroom = null;
                 }
             }
         }, new Response.ErrorListener() {

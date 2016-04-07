@@ -136,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 DepartedForNewBathroom = true;
                 Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
-
                 intent1.putExtra("lat", mLastLocation.latitude);
                 intent1.putExtra("lon", mLastLocation.longitude);
 

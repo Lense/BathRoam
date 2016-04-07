@@ -130,20 +130,17 @@ public class MainActivity extends AppCompatActivity implements
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mLastLocation == null ) {
-                    Snackbar.make(findViewById(R.id.new_bathroom_fab),
-                            "Cannot find your location!",
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                } else {
-                    DepartedForNewBathroom = true;
-                    Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
-
-                    intent1.putExtra("lat", mLastLocation.latitude);
-                    intent1.putExtra("lon", mLastLocation.longitude);
-
-                    startActivity(intent1);
+                if (mLastLocation == null) {
+                    Toast.makeText(getApplicationContext(), "Cannot find your location!", Toast.LENGTH_LONG).show();
+                    return;
                 }
+                DepartedForNewBathroom = true;
+                Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
+
+                intent1.putExtra("lat", mLastLocation.latitude);
+                intent1.putExtra("lon", mLastLocation.longitude);
+
+                startActivity(intent1);
             }
         });
 
@@ -169,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements
                 String url = builder.build().toString();
                 findNearestBathroom(url);
                 if (mNearestBathroom == null) {
-                    Toast.makeText(getApplicationContext(), "No restrooms were found nearby", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Unable to locate nearest restroom!", Toast.LENGTH_LONG).show();
                     return;
                 }
                 mMap.addMarker(new MarkerOptions().position(mNearestBathroom.getLocation()).title(String.valueOf(mNearestBathroom.getRating())));
@@ -183,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mBathroomMap = new HashMap<>();
-if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -191,16 +188,16 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-
         } else {
+            Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
+            if (myLocation != null) {
+                mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
+                mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
+                Log.d(TAG, "AT "+mLastLocation.toString());
+            } else {Log.d(TAG, "COULDNT LOCATE");}
+        }
 
-        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
-        if (myLocation != null) {
-            mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
-            mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
-            Log.d(TAG, "AT "+mLastLocation.toString());
-        } else {Log.d(TAG, "COULDNT LOCATE");} }
         // Open the bathroom drilldown when a marker is clicked
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -278,10 +275,10 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
                         JSONObject jo = response.getJSONObject(i);
                         int id = jo.getInt("id");
                         JSONArray locArray = jo.getJSONArray("loc");
-                        Double lat = (Double)locArray.get(0);
-                        Double lon = (Double)locArray.get(1);
+                        Double lat = Double.parseDouble((String)locArray.get(0));
+                        Double lon = Double.parseDouble((String)locArray.get(1));
                         LatLng loc = new LatLng(lat, lon);
-                        float rating = (float) jo.getDouble("rating");
+                        float rating = (float) jo.getDouble("cleanliness");
 
                         // Construct the new bathroom and add it if necessary
                         Bathroom newBathroom = new Bathroom(id, loc, rating);
@@ -363,10 +360,10 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
                     // Parse the JSON object for bathroom information
                     int id = response.getInt("id");
                     JSONArray locArray = response.getJSONArray("loc");
-                    Double lat = (Double)locArray.get(0);
-                    Double lon = (Double)locArray.get(1);
+                    Double lat = Double.parseDouble((String) locArray.get(0));
+                    Double lon = Double.parseDouble((String) locArray.get(1));
                     LatLng loc = new LatLng(lat, lon);
-                    float rating = (float) response.getDouble("rating");
+                    float rating = (float) response.getDouble("cleanliness");
                     mNearestBathroom = new Bathroom(id, loc, rating);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -204,7 +204,12 @@ public class MainActivity extends AppCompatActivity implements
                 Intent intent1 = new Intent(MainActivity.this, DrilldownActivity.class);
                 String title = marker.getTitle();
                 intent1.putExtra("markerTitle", title);
-                intent1.putExtra("bathroomID", mBathroomMap.get(marker.getId()).getID());
+                try {
+
+                    intent1.putExtra("bathroomID", mBathroomMap.get(marker.getId()).getID());
+                } catch (NullPointerException e) {
+                    Toast.makeText(getApplicationContext(), "Unable to display bathroom", Toast.LENGTH_SHORT).show();
+                }
                 startActivity(intent1);
             }
         });

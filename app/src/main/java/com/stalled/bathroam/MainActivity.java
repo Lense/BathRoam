@@ -225,11 +225,11 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
                         .authority("104.131.49.58")
                         .appendPath("api")
                         .appendPath("bathrooms")
-                        .appendPath("nearby")
+                        .appendPath("within")
                         .appendQueryParameter("ne_lat", String.valueOf(bounds.northeast.latitude))
-                        .appendQueryParameter("ne_long", String.valueOf(bounds.northeast.longitude))
+                        .appendQueryParameter("ne_lon", String.valueOf(bounds.northeast.longitude))
                         .appendQueryParameter("sw_lat", String.valueOf(bounds.southwest.latitude))
-                        .appendQueryParameter("sw_long", String.valueOf(bounds.southwest.longitude));
+                        .appendQueryParameter("sw_lon", String.valueOf(bounds.southwest.longitude));
                 String url = builder.build().toString();
                 GetLocalBathrooms(url);
             }

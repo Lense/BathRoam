@@ -2,7 +2,7 @@
 
 
 ## Api Spec
-Draft 3
+Draft 3.1
 ###Get information
 ####Get all bathrooms
 `GET /api/bathrooms/all`
@@ -11,7 +11,8 @@ Draft 3
 	{
 		"id": <int>,
 		"loc": [<float>, <float>],
-		"rating": <float>
+		"cleanliness": <float>
+		"novelty": <float>
 	},
 	...
 ]
@@ -42,7 +43,6 @@ id=<int>
 	"feminine": <bool>,
 	"medicine": <bool>,
 	"contraceptive": <bool>,
-	"urinal": <bool>
 }
 ```
 
@@ -56,7 +56,8 @@ lon=<float>
 {
 	"id": <int>,
 	"loc": [<float>, <float>],
-	"rating": <float>
+	"cleanliness": <float>
+	"novelty": <float>
 }
 ```
 
@@ -73,7 +74,8 @@ sw_lon=<float>
 	{
 		"id": <int>,
 		"loc": [<float>, <float>],
-		"rating": <float>
+		"cleanliness": <float>
+		"novelty": <float>
 	},
 	...
 ]
@@ -102,7 +104,6 @@ urinals=<int>
 feminine=<bool>
 medicine=<bool>
 contraceptive=<bool>
-urinal=<bool>
 ```
 ```json
 {

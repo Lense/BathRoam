@@ -9,6 +9,10 @@
         "Show reviews and whatnot.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     </string>
     <string name="action_settings">Settings</string>
+<<<<<<< HEAD
     <string name="title_activity_new_bathroom">NewBathroomActivity</string>
     <string name="google_app_id">bathroam-fffff</string>
+=======
+    <string name="title_activity_new_bathroom">Add a New Bathroom</string>
+>>>>>>> 95eb536ab61f88442b78d5638ba03107b3e7e259
 </resources>

@@ -7,7 +7,11 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+<<<<<<< HEAD
 import android.support.v4.app.ActivityCompat;
+=======
+import android.support.design.widget.Snackbar;
+>>>>>>> 95eb536ab61f88442b78d5638ba03107b3e7e259
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -50,7 +54,19 @@ public class MainActivity extends AppCompatActivity implements
     private float mMinRating;
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
+<<<<<<< HEAD
     private GoogleApiClient mClient;
+=======
+    private SeekBar min_rating_slider;
+    private float min_rating;
+    private Marker mMarker;
+    private GoogleApiClient client;
+    private ArrayList<Bathroom> local_bathrooms = new ArrayList<Bathroom>();
+
+    // Will added this
+    private boolean DepartedForNewBathroom = false;
+
+>>>>>>> 95eb536ab61f88442b78d5638ba03107b3e7e259
     private static final String TAG = "MapActivity";
     private LatLng mLastLocation;
     private Bathroom mNearestBathroom;
@@ -124,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DepartedForNewBathroom = true;
                 Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
                 startActivity(intent1);
             }
@@ -164,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+<<<<<<< HEAD
         mBathroomMap = new HashMap<>();
 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -184,6 +202,14 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
             Log.d(TAG, "AT "+mLastLocation.toString());
         } else {Log.d(TAG, "COULDNT LOCATE");} }
         // Open the bathroom drilldown when a marker is clicked
+=======
+
+        // Create a sample marker when the map is ready
+        LatLng RPI = new LatLng(42.730160, -73.678814);
+        mMarker = mMap.addMarker(new MarkerOptions().position(RPI).title("RPI"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RPI, 18));
+
+>>>>>>> 95eb536ab61f88442b78d5638ba03107b3e7e259
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -231,6 +257,18 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
     public void onStop() {
         super.onStop();
         mClient.disconnect();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ( DepartedForNewBathroom ) {
+            DepartedForNewBathroom = false;
+            Snackbar.make(findViewById(R.id.fab),
+                    "Thank you for your submission!",
+                    Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     private void GetLocalBathrooms(String url) {

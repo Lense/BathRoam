@@ -2,7 +2,7 @@
 
 
 ## Api Spec
-Draft 3.1
+Draft 3.2
 ###Get information
 ####Get all bathrooms
 `GET /api/bathrooms/all`
@@ -104,6 +104,20 @@ urinals=<int>
 feminine=<bool>
 medicine=<bool>
 contraceptive=<bool>
+```
+```json
+{
+	"id": <int>
+}
+```
+
+####Create new Rating
+```
+POST /api/ratings/create
+bathroom_id=<int>
+mac_address=<str>
+novelty=<float>
+cleanliness=<float>
 ```
 ```json
 {

@@ -3,7 +3,7 @@
 from flask import Flask, jsonify, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 
-from BathRoam.dbClasses import db, Bathroom
+from BathRoam.dbClasses import db, Bathroom, Rating
 
 def create_app(config="BathRoam.config"):
 	app = Flask("BathRoam")
@@ -89,5 +89,15 @@ def create_app(config="BathRoam.config"):
 			db.session.add(b)
 			db.session.commit()
 			return jsonify({"id": b.bathroom_id})
+
+		@app.route('/api/ratings/create', methods=['POST'])
+		def post_new_rating():
+			try:
+				r = Rating(bathroom_id=request.form["bathroom_id"], mac_address=request.form["mac_address"], novelty=float(request.form["novelty"]), cleanliness=float(request.form["cleanliness"]))
+			except (KeyError, ValueError):
+				return make_response(jsonify({'error': 'Bad request'}), 400)
+			db.session.add(r)
+			db.session.commit()
+			return jsonify({"id": r.rating_id})
 
 	return app

@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener {
 
+    // FOR THE PREFERENCE DRAWER
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+    private ArrayAdapter<String> mAdapter;
+
     private float mMinRating;
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
@@ -69,6 +77,13 @@ public class MainActivity extends AppCompatActivity implements
         View mCustomView = mInflater.inflate(R.layout.slider, null);
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
+
+        // Populate the Preference Drawer with items
+        mDrawerList = (ListView)findViewById(R.id.nav_list);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.preference_drawer);
+        String[] osArray = { "Android", "iOS", "Windows", "OS X", "Linux" };
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mDrawerList.setAdapter(mAdapter);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -166,7 +181,22 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 mMap.addMarker(new MarkerOptions().position(mNearestBathroom.getLocation()).title(String.valueOf(mNearestBathroom.getRating())));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mNearestBathroom.getLocation(), 18));
-        }});
+            }
+        });
+
+
+        //View mCustomView2 = (View) mInflater.inflate(R.layout.preference_drawer, null);
+        //mDrawerList = (ListView) mCustomView2.findViewById(R.id.nav_list);
+
+      //  setContentView(R.layout.preference_drawer);
+//        mDrawerList = (ListView)findViewById(R.id.nav_list);
+//
+//        String[] osArray = { "Android", "iOS", "Windows", "OS X", "Linux" };
+//        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+//        if(mDrawerList == null){
+//            Log.d(TAG, "shit");
+//        }
+//        mDrawerList.setAdapter(mAdapter);
 
     }
 
@@ -286,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements
                             mLocalBathrooms.add(newBathroom);
                             if(rating >= mMinRating){
                                 Marker tmp =
-                                mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
+                                        mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
 
                                 mBathroomMap.put(tmp.getId(), newBathroom);
                             }

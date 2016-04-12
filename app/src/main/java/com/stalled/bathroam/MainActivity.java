@@ -40,7 +40,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,9 +51,6 @@ public class MainActivity extends AppCompatActivity implements
     private float mMinRating;
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
-
-    // Will added this
-    private boolean DepartedForNewBathroom = false;
 
     private GoogleApiClient mClient;
     private static final String TAG = "MapActivity";
@@ -134,12 +130,12 @@ public class MainActivity extends AppCompatActivity implements
                     Toast.makeText(getApplicationContext(), "Cannot find your location!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                DepartedForNewBathroom = true;
+
                 Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
                 intent1.putExtra("lat", mLastLocation.latitude);
                 intent1.putExtra("lon", mLastLocation.longitude);
 
-                startActivity(intent1);
+                startActivityForResult(intent1, 0);
             }
         });
 
@@ -238,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onStart() {
         super.onStart();
         mClient.connect();
-
     }
 
     @Override
@@ -248,14 +243,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if ( DepartedForNewBathroom ) {
-            DepartedForNewBathroom = false;
-            Snackbar.make(findViewById(R.id.new_bathroom_fab),
-                    "Thank you for your submission!",
-                    Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                Snackbar.make(findViewById(R.id.new_bathroom_fab),
+                        "Thank you for your submission!",
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
         }
     }
 
@@ -277,7 +272,8 @@ public class MainActivity extends AppCompatActivity implements
                         Double lat = Double.parseDouble((String)locArray.get(0));
                         Double lon = Double.parseDouble((String)locArray.get(1));
                         LatLng loc = new LatLng(lat, lon);
-                        float rating = (float) jo.getDouble("cleanliness");
+                        float rating = ( (float) jo.getDouble("cleanliness") + (float) jo.getDouble("novelty") ) / 2.0f;
+
 
                         // Construct the new bathroom and add it if necessary
                         Bathroom newBathroom = new Bathroom(id, loc, rating);
@@ -285,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements
                             mLocalBathrooms.add(newBathroom);
                             if(rating >= mMinRating){
                                 Marker tmp =
-                                mMap.addMarker(new MarkerOptions().position(loc).title(String.valueOf(rating)));
+                                mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
 
                                 mBathroomMap.put(tmp.getId(), newBathroom);
                             }

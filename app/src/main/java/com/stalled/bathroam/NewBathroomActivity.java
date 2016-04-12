@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.os.NetworkOnMainThreadException;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -97,12 +98,15 @@ public class NewBathroomActivity extends AppCompatActivity {
 
                 new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/create", content);
 
+                setResult(RESULT_OK);
                 NewBathroomActivity.this.finish();
             }
         });
 
         try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ActionBar ab = getSupportActionBar();
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setDisplayShowHomeEnabled(true);
         } catch (NullPointerException e) {
             Log.d("Hello", "Could not generate back button. Sorry :(");
         }

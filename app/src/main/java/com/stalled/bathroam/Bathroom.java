@@ -27,7 +27,6 @@ public class Bathroom {
     private boolean mFeminine;
     private boolean mMedicine;
     private boolean mContraceptive;
-    private boolean mUrinal;
 
     private boolean mComplete;
 
@@ -82,13 +81,13 @@ public class Bathroom {
         JSONArray loc = details.getJSONArray("loc");
         mId = details.getInt("id");
         mLocation = new LatLng(loc.getDouble(0), loc.getDouble(1));
-        mRating = (float) details.getDouble("rating");
+        //mRating = (float) details.getDouble("rating");
         mClass = details.getString("class");
         mGender = details.getString("gender");
         mNovelty = (float) details.getDouble("novelty");
         mCleanliness = (float) details.getDouble("cleanliness");
         mFloor = details.getInt("floor");
-        mPrivate = details.getBoolean("private");
+        mPrivate = details.getBoolean("public");
         mPaper = details.getBoolean("paper");
         mDryers = details.getBoolean("dryers");
         mStalls = details.getInt("stalls");
@@ -100,7 +99,6 @@ public class Bathroom {
         mFeminine = details.getBoolean("feminine");
         mMedicine = details.getBoolean("medicine");
         mContraceptive = details.getBoolean("contraceptive");
-        mUrinal = details.getBoolean("urinal");
 
         mComplete = true;
     }

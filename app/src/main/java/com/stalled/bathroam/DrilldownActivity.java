@@ -62,7 +62,6 @@ public class DrilldownActivity extends AppCompatActivity {
         mTitle = intent.getStringExtra("markerTitle");
         mBathroomID = intent.getIntExtra("bathroomID", 0);
 
-
         // Set up toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,6 +86,7 @@ public class DrilldownActivity extends AppCompatActivity {
                 .appendPath("bathrooms")
                 .appendQueryParameter("id", String.valueOf(mBathroomID));
         String url = builder.build().toString();
+        Log.d("Hello",url);
 
         // Request bathroom details
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

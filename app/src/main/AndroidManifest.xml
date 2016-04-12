@@ -48,7 +48,9 @@
         <activity
             android:name="com.stalled.bathroam.NewBathroomActivity"
             android:label="@string/title_activity_new_bathroom"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.stalled.bathroam.MainActivity">
+        </activity>
     </application>
 
 </manifest>

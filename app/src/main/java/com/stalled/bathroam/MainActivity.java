@@ -386,7 +386,11 @@ public class MainActivity extends AppCompatActivity implements
                     }
                     Marker tmp = mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
                     mBathroomMap.put(tmp.getId(), mNearestBathroom);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 18));
+                    CameraPosition newCamPos = new CameraPosition(loc,
+                            mMap.getCameraPosition().zoom,
+                            mMap.getCameraPosition().tilt, //use old tilt
+                            mMap.getCameraPosition().bearing); //use old bearing
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCamPos), 250, null);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Unable to locate nearest restroom!", Toast.LENGTH_LONG).show();

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<!--String  mClass;-->
+	<MultiSelectListPreference android:key = "class"
+							   android:title="Class"
+							   android:entries="@array/bathroom_classes"
+							   android:entryValues="@array/bathroom_classes"/>
+	<!--String  mGender;-->
+	<!--float   mNovelty;-->
+	<!--float   mCleanliness;-->
+	<!--int     mFloor;-->
+
+	<SwitchPreference android:key="private"
+						android:title="Private"
+						android:defaultValue="true"/>
+	<SwitchPreference android:key="paper"
+						android:title="Paper Towels"
+						android:defaultValue="true"/>
+	<SwitchPreference android:key="dryers"
+						android:title="Hand Dryers"
+						android:defaultValue="true"/>
+	<!--int     mStalls;-->
+	<SwitchPreference android:key="handicap"
+						android:title="Handicap Accessible"
+						android:defaultValue="true"/>
+	<!--int     mSinks;-->
+	<SwitchPreference android:key="sanitizer"
+						android:title="Hand Sanitizer"
+						android:defaultValue="true"/>
+	<SwitchPreference android:key="baby"
+						android:title="Free Babies"
+						android:defaultValue="true"/>
+	<!--int     mUrinals;-->
+	<SwitchPreference android:key="feminine"
+						android:title="Feminine Products"
+						android:defaultValue="true"/>
+	<SwitchPreference android:key="medicine"
+						android:title="Medicine"
+						android:defaultValue="true"/>
+	<SwitchPreference android:key="contraceptive"
+						android:title="Contraceptive"
+						android:defaultValue="true"/>
+</PreferenceScreen>

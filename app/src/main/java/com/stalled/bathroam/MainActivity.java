@@ -8,14 +8,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.support.v4.app.ActivityCompat;
 =======
 import android.support.design.widget.Snackbar;
 >>>>>>> 95eb536ab61f88442b78d5638ba03107b3e7e259
 import android.support.v7.app.ActionBar;
+=======
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+>>>>>>> map_latest
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -51,9 +58,13 @@ public class MainActivity extends AppCompatActivity implements
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener {
 
+    // FOR THE PREFERENCE DRAWER
+    private DrawerLayout mDrawerLayout;
+
     private float mMinRating;
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
+<<<<<<< HEAD
 <<<<<<< HEAD
     private GoogleApiClient mClient;
 =======
@@ -67,6 +78,13 @@ public class MainActivity extends AppCompatActivity implements
     private boolean DepartedForNewBathroom = false;
 
 >>>>>>> 95eb536ab61f88442b78d5638ba03107b3e7e259
+=======
+	private com.stalled.bathroam.PreferenceDrawerFragment mPreferenceDrawerFragment;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private Toolbar mToolbar;
+
+    private GoogleApiClient mClient;
+>>>>>>> map_latest
     private static final String TAG = "MapActivity";
     private LatLng mLastLocation;
     private Bathroom mNearestBathroom;
@@ -78,21 +96,41 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         // Populate the Action Bar with the custom layout
-        ActionBar mActionBar = getSupportActionBar();
-        LayoutInflater mInflater = LayoutInflater.from(this);
-        View mCustomView = mInflater.inflate(R.layout.slider, null);
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
+//        ActionBar mActionBar = getSupportActionBar();
+//	    mToolbar = findViewById(R.id.toolbar);
+//        LayoutInflater mInflater = LayoutInflater.from(this);
+//        View mCustomView = mInflater.inflate(R.layout.slider, null);
+//	    setSupportActionBar(mToolbar);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+	    // Populate the Preference Drawer with the preference fragment
+	    mPreferenceDrawerFragment = (PreferenceDrawerFragment) getFragmentManager().findFragmentById(R.id.preference_drawer);
+	    mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+	    mPreferenceDrawerFragment.setUp( R.id.preference_drawer, mDrawerLayout);
+
+	    mDrawerToggle = new ActionBarDrawerToggle( this, mDrawerLayout,
+			  mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+		    public void onDrawerClosed(View view) {
+			    super.onDrawerClosed(view);
+		    }
+
+		    public void onDrawerOpened(View drawerView) {
+			    super.onDrawerOpened(drawerView);
+		    }
+	    };
+
+	    mDrawerLayout.setDrawerListener(mDrawerToggle);
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    getSupportActionBar().setHomeButtonEnabled(true);
+
+	    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+	    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
             .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+	    mapFragment.getMapAsync(this);
 
-        // Initialize the SeekBar listener for minimum bathroom ratings
-        mMinRating = 0;
-        SeekBar minRatingSlider = (SeekBar) findViewById(R.id.rating);
-        minRatingSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+	    // Initialize the SeekBar listener for minimum bathroom ratings
+	    mMinRating = 0;
+	    SeekBar minRatingSlider = (SeekBar) findViewById(R.id.rating);
+	    minRatingSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -118,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements
                     Bathroom bathroom = mLocalBathrooms.get(i);
                     if (bathroom.getRating() >= mMinRating) {
                         mMap.addMarker(new MarkerOptions()
-                            .position(bathroom.getLocation())
-                            .title(String.valueOf(bathroom.getRating()))
+                                        .position(bathroom.getLocation())
+                                        .title(String.valueOf(bathroom.getRating()))
                         );
                     }
                 }
@@ -140,9 +178,16 @@ public class MainActivity extends AppCompatActivity implements
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DepartedForNewBathroom = true;
+                if (mLastLocation == null) {
+                    Toast.makeText(getApplicationContext(), "Cannot find your location!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
-                startActivity(intent1);
+                intent1.putExtra("lat", mLastLocation.latitude);
+                intent1.putExtra("lon", mLastLocation.longitude);
+
+                startActivityForResult(intent1, 0);
             }
         });
 
@@ -168,13 +213,13 @@ public class MainActivity extends AppCompatActivity implements
                 String url = builder.build().toString();
                 findNearestBathroom(url);
                 if (mNearestBathroom == null) {
-                    Toast.makeText(getApplicationContext(), "No restrooms were found nearby", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Unable to locate nearest restroom!", Toast.LENGTH_LONG).show();
                     return;
                 }
                 mMap.addMarker(new MarkerOptions().position(mNearestBathroom.getLocation()).title(String.valueOf(mNearestBathroom.getRating())));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mNearestBathroom.getLocation(), 18));
-        }});
-
+            }
+        });
     }
 
 
@@ -182,8 +227,11 @@ public class MainActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> map_latest
         mBathroomMap = new HashMap<>();
-if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -191,17 +239,18 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-
         } else {
+            Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
+            if (myLocation != null) {
+                mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
+                mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
+                Log.d(TAG, "AT "+mLastLocation.toString());
+            } else {Log.d(TAG, "COULDNT LOCATE");}
+        }
 
-        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
-        if (myLocation != null) {
-            mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
-            mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
-            Log.d(TAG, "AT "+mLastLocation.toString());
-        } else {Log.d(TAG, "COULDNT LOCATE");} }
         // Open the bathroom drilldown when a marker is clicked
+<<<<<<< HEAD
 =======
 
         // Create a sample marker when the map is ready
@@ -210,13 +259,20 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RPI, 18));
 
 >>>>>>> 95eb536ab61f88442b78d5638ba03107b3e7e259
+=======
+>>>>>>> map_latest
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 Intent intent1 = new Intent(MainActivity.this, DrilldownActivity.class);
                 String title = marker.getTitle();
                 intent1.putExtra("markerTitle", title);
-                intent1.putExtra("bathroomID", mBathroomMap.get(marker.getId()).getID());
+                try {
+
+                    intent1.putExtra("bathroomID", mBathroomMap.get(marker.getId()).getID());
+                } catch (NullPointerException e) {
+                    Toast.makeText(getApplicationContext(), "Unable to display bathroom", Toast.LENGTH_SHORT).show();
+                }
                 startActivity(intent1);
             }
         });
@@ -233,13 +289,13 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
                         .authority("104.131.49.58")
                         .appendPath("api")
                         .appendPath("bathrooms")
-                        .appendPath("nearby")
+                        .appendPath("within")
                         .appendQueryParameter("ne_lat", String.valueOf(bounds.northeast.latitude))
-                        .appendQueryParameter("ne_long", String.valueOf(bounds.northeast.longitude))
+                        .appendQueryParameter("ne_lon", String.valueOf(bounds.northeast.longitude))
                         .appendQueryParameter("sw_lat", String.valueOf(bounds.southwest.latitude))
-                        .appendQueryParameter("sw_long", String.valueOf(bounds.southwest.longitude));
+                        .appendQueryParameter("sw_lon", String.valueOf(bounds.southwest.longitude));
                 String url = builder.build().toString();
-                GetLocalBathrooms(url);
+                getLocalBathrooms(url);
             }
         });
 
@@ -250,7 +306,6 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
     public void onStart() {
         super.onStart();
         mClient.connect();
-
     }
 
     @Override
@@ -260,18 +315,22 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if ( DepartedForNewBathroom ) {
-            DepartedForNewBathroom = false;
-            Snackbar.make(findViewById(R.id.fab),
-                    "Thank you for your submission!",
-                    Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                Snackbar.make(findViewById(R.id.new_bathroom_fab),
+                        "Thank you for your submission!",
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
         }
     }
 
-    private void GetLocalBathrooms(String url) {
+    public GoogleApiClient getClient() {
+        return mClient;
+    }
+
+    private void getLocalBathrooms(String url) {
 
         JsonArrayRequest jsArrReq = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -282,10 +341,11 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
                         JSONObject jo = response.getJSONObject(i);
                         int id = jo.getInt("id");
                         JSONArray locArray = jo.getJSONArray("loc");
-                        Double lat = (Double)locArray.get(0);
-                        Double lon = (Double)locArray.get(1);
+                        Double lat = Double.parseDouble((String)locArray.get(0));
+                        Double lon = Double.parseDouble((String)locArray.get(1));
                         LatLng loc = new LatLng(lat, lon);
-                        float rating = (float) jo.getDouble("rating");
+                        float rating = ( (float) jo.getDouble("cleanliness") + (float) jo.getDouble("novelty") ) / 2.0f;
+
 
                         // Construct the new bathroom and add it if necessary
                         Bathroom newBathroom = new Bathroom(id, loc, rating);
@@ -293,7 +353,7 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
                             mLocalBathrooms.add(newBathroom);
                             if(rating >= mMinRating){
                                 Marker tmp =
-                                mMap.addMarker(new MarkerOptions().position(loc).title(String.valueOf(rating)));
+                                        mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
 
                                 mBathroomMap.put(tmp.getId(), newBathroom);
                             }
@@ -367,10 +427,10 @@ if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOC
                     // Parse the JSON object for bathroom information
                     int id = response.getInt("id");
                     JSONArray locArray = response.getJSONArray("loc");
-                    Double lat = (Double)locArray.get(0);
-                    Double lon = (Double)locArray.get(1);
+                    Double lat = Double.parseDouble((String) locArray.get(0));
+                    Double lon = Double.parseDouble((String) locArray.get(1));
                     LatLng loc = new LatLng(lat, lon);
-                    float rating = (float) response.getDouble("rating");
+                    float rating = (float) response.getDouble("cleanliness");
                     mNearestBathroom = new Bathroom(id, loc, rating);
                 } catch (JSONException e) {
                     e.printStackTrace();

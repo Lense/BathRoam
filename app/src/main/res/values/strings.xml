@@ -1,9 +1,16 @@
 <resources>
-    <string name="app_name">BathRoam</string>
-    <string name="title_activity_main">Map</string>
-    <string name="title_activity_display_bathroom">Bathroom</string>
-    <string name="title_activity_drilldown">Bathroom</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_new_bathroom">Add a New Bathroom</string>
-    <string name="google_app_id">bathroam-fffff</string>
+	<string name="app_name">BathRoam</string>
+	<string name="title_activity_main">Map</string>
+	<string name="title_activity_display_bathroom">Bathroom</string>
+	<string name="title_activity_drilldown">Bathroom</string>
+	<string name="action_settings">Settings</string>
+	<string name="title_activity_new_bathroom">Add a New Bathroom</string>
+	<string name="google_app_id">bathroam-fffff</string>
+
+	<string-array name="bathroom_classes">Pit, Trough, Outhouse</string-array>
+
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="navigation_drawer_open">open drawer</string>
+	<string name="navigation_drawer_close">close drawer</string>
 </resources>

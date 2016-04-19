@@ -10,13 +10,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,13 +50,14 @@ public class MainActivity extends AppCompatActivity implements
     GoogleApiClient.OnConnectionFailedListener {
 
     // FOR THE PREFERENCE DRAWER
-    private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
-    private ArrayAdapter<String> mAdapter;
 
     private float mMinRating;
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
+	private com.stalled.bathroam.PreferenceDrawerFragment mPreferenceDrawerFragment;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private Toolbar mToolbar;
 
     private GoogleApiClient mClient;
     private static final String TAG = "MapActivity";
@@ -72,28 +71,41 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         // Populate the Action Bar with the custom layout
-        ActionBar mActionBar = getSupportActionBar();
-        LayoutInflater mInflater = LayoutInflater.from(this);
-        View mCustomView = mInflater.inflate(R.layout.slider, null);
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
+//        ActionBar mActionBar = getSupportActionBar();
+//	    mToolbar = findViewById(R.id.toolbar);
+//        LayoutInflater mInflater = LayoutInflater.from(this);
+//        View mCustomView = mInflater.inflate(R.layout.slider, null);
+//	    setSupportActionBar(mToolbar);
 
-        // Populate the Preference Drawer with items
-        mDrawerList = (ListView)findViewById(R.id.nav_list);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.preference_drawer);
-        String[] osArray = { "Android", "iOS", "Windows", "OS X", "Linux" };
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-        mDrawerList.setAdapter(mAdapter);
+	    // Populate the Preference Drawer with the preference fragment
+	    mPreferenceDrawerFragment = (PreferenceDrawerFragment) getFragmentManager().findFragmentById(R.id.preference_drawer);
+	    mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+	    mPreferenceDrawerFragment.setUp( R.id.preference_drawer, mDrawerLayout);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+	    mDrawerToggle = new ActionBarDrawerToggle( this, mDrawerLayout,
+			  mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+		    public void onDrawerClosed(View view) {
+			    super.onDrawerClosed(view);
+		    }
+
+		    public void onDrawerOpened(View drawerView) {
+			    super.onDrawerOpened(drawerView);
+		    }
+	    };
+
+	    mDrawerLayout.setDrawerListener(mDrawerToggle);
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    getSupportActionBar().setHomeButtonEnabled(true);
+
+	    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+	    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
             .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+	    mapFragment.getMapAsync(this);
 
-        // Initialize the SeekBar listener for minimum bathroom ratings
-        mMinRating = 0;
-        SeekBar minRatingSlider = (SeekBar) findViewById(R.id.rating);
-        minRatingSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+	    // Initialize the SeekBar listener for minimum bathroom ratings
+	    mMinRating = 0;
+	    SeekBar minRatingSlider = (SeekBar) findViewById(R.id.rating);
+	    minRatingSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -183,21 +195,6 @@ public class MainActivity extends AppCompatActivity implements
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mNearestBathroom.getLocation(), 18));
             }
         });
-
-
-        //View mCustomView2 = (View) mInflater.inflate(R.layout.preference_drawer, null);
-        //mDrawerList = (ListView) mCustomView2.findViewById(R.id.nav_list);
-
-      //  setContentView(R.layout.preference_drawer);
-//        mDrawerList = (ListView)findViewById(R.id.nav_list);
-//
-//        String[] osArray = { "Android", "iOS", "Windows", "OS X", "Linux" };
-//        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-//        if(mDrawerList == null){
-//            Log.d(TAG, "shit");
-//        }
-//        mDrawerList.setAdapter(mAdapter);
-
     }
 
 
@@ -258,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements
                         .appendQueryParameter("sw_lat", String.valueOf(bounds.southwest.latitude))
                         .appendQueryParameter("sw_lon", String.valueOf(bounds.southwest.longitude));
                 String url = builder.build().toString();
-                GetLocalBathrooms(url);
+                getLocalBathrooms(url);
             }
         });
 
@@ -293,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements
         return mClient;
     }
 
-    private void GetLocalBathrooms(String url) {
+    private void getLocalBathrooms(String url) {
 
         JsonArrayRequest jsArrReq = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override

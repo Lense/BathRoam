@@ -103,12 +103,10 @@ public class NewBathroomActivity extends AppCompatActivity {
             }
         });
 
-        try {
-            ActionBar ab = getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
+        if ( ab != null ) {
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setDisplayShowHomeEnabled(true);
-        } catch (NullPointerException e) {
-            Log.d("Hello", "Could not generate back button. Sorry :(");
         }
     }
 

@@ -126,14 +126,15 @@ public class MainActivity extends AppCompatActivity implements
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mLastLocation == null) {
-                    Toast.makeText(getApplicationContext(), "Cannot find your location!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
                 Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
-                intent1.putExtra("lat", mLastLocation.latitude);
-                intent1.putExtra("lon", mLastLocation.longitude);
+
+                if (mLastLocation == null) {
+                    intent1.putExtra("lat", Double.NaN);
+                    intent1.putExtra("lon", Double.NaN);
+                } else {
+                    intent1.putExtra("lat", mLastLocation.latitude);
+                    intent1.putExtra("lon", mLastLocation.longitude);
+                }
 
                 startActivityForResult(intent1, 0);
             }

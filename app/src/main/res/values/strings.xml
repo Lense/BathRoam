@@ -7,7 +7,17 @@
 	<string name="title_activity_new_bathroom">Add a New Bathroom</string>
 	<string name="google_app_id">bathroam-fffff</string>
 
-	<string-array name="bathroom_classes">Pit, Trough, Outhouse</string-array>
+	<string-array name="bathroom_classes">
+        <item>Pit</item>
+        <item>Trough</item>
+        <item>Outhouse</item>
+    </string-array>
+    <string-array name="bathroom_genders">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Gender Neutral</item>
+    </string-array>
+	<string-array name="empty_array"></string-array>
 
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>

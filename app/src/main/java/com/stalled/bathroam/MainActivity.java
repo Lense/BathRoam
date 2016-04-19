@@ -125,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements
 
                 // Only display bathrooms meeting the minimum rating requirement
                 mMap.clear();
-                if (mLastLocation != null)
-                    mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
                 for (int i = 0; i < mLocalBathrooms.size(); i++) {
                     Bathroom bathroom = mLocalBathrooms.get(i);
                     if (bathroom.getRating() >= mMinRating) {
@@ -187,12 +185,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 String url = builder.build().toString();
                 findNearestBathroom(url);
-                if (mNearestBathroom == null) {
-                    Toast.makeText(getApplicationContext(), "Unable to locate nearest restroom!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                mMap.addMarker(new MarkerOptions().position(mNearestBathroom.getLocation()).title(String.valueOf(mNearestBathroom.getRating())));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mNearestBathroom.getLocation(), 18));
             }
         });
     }
@@ -212,10 +204,10 @@ public class MainActivity extends AppCompatActivity implements
             // for ActivityCompat#requestPermissions for more details.
         } else {
             Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
+            mMap.setMyLocationEnabled(true);
             if (myLocation != null) {
                 mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
-                mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
                 Log.d(TAG, "AT "+mLastLocation.toString());
             } else {Log.d(TAG, "COULDNT LOCATE");}
         }
@@ -312,9 +304,7 @@ public class MainActivity extends AppCompatActivity implements
                         if(!mLocalBathrooms.contains(newBathroom)){
                             mLocalBathrooms.add(newBathroom);
                             if(rating >= mMinRating){
-                                Marker tmp =
-                                        mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
-
+                                Marker tmp = mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
                                 mBathroomMap.put(tmp.getId(), newBathroom);
                             }
                         }
@@ -355,7 +345,6 @@ public class MainActivity extends AppCompatActivity implements
         if (myLocation != null) {
             mLastLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocation, 18));
-            mMap.addMarker(new MarkerOptions().position(mLastLocation).title("Here"));
             Log.d(TAG, "AT "+mLastLocation.toString());
         } else {Log.d(TAG, "COULDNT LOCATE");}
 
@@ -390,10 +379,17 @@ public class MainActivity extends AppCompatActivity implements
                     Double lat = Double.parseDouble((String) locArray.get(0));
                     Double lon = Double.parseDouble((String) locArray.get(1));
                     LatLng loc = new LatLng(lat, lon);
-                    float rating = (float) response.getDouble("cleanliness");
+                    float rating = ( (float) response.getDouble("cleanliness") + (float) response.getDouble("novelty") ) / 2.0f;
                     mNearestBathroom = new Bathroom(id, loc, rating);
+                    if(!mLocalBathrooms.contains(mNearestBathroom)){
+                        mLocalBathrooms.add(mNearestBathroom);
+                    }
+                    Marker tmp = mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
+                    mBathroomMap.put(tmp.getId(), mNearestBathroom);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 18));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Unable to locate nearest restroom!", Toast.LENGTH_LONG).show();
                     mNearestBathroom = null;
                 }
             }

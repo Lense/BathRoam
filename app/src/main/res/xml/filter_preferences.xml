@@ -33,7 +33,7 @@
 		android:title="Hand Sanitizer"
 		android:defaultValue="false"/>
 	<SwitchPreference android:key="baby"
-		android:title="Free Babies"
+		android:title="Changing Table"
 		android:defaultValue="false"/>
 	<SwitchPreference android:key="feminine"
 		android:title="Feminine Products"

@@ -9,7 +9,6 @@ import org.json.JSONObject;
 public class Bathroom {
     private int     mId;
     private LatLng  mLocation;
-    private float   mRating;
     private String  mClass;
     private String  mGender;
     private float   mNovelty;
@@ -32,11 +31,11 @@ public class Bathroom {
 
     public Bathroom() {}
 
-    public Bathroom(int id, LatLng location, float rating) {
+    public Bathroom(int id, LatLng location, float novelty, float cleanliness) {
         mId = id;
         mLocation = location;
-        mRating = rating;
-
+        mNovelty = novelty;
+        mCleanliness = cleanliness;
         mComplete = false;
     }
 
@@ -50,10 +49,7 @@ public class Bathroom {
     }
 
     public float getRating() {
-        if (mComplete) {
-            mRating = (mCleanliness + mNovelty) / 2;
-        }
-        return mRating;
+        return (mCleanliness + mNovelty) / 2.0f;
     }
 
     public float getCleanliness() {

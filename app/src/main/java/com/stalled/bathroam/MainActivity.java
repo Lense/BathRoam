@@ -237,11 +237,6 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Open the bathroom drilldown when a marker is clicked
-
-        // Create a sample marker when the map is ready
-        LatLng RPI = new LatLng(42.730160, -73.678814);
-        mMarker = mMap.addMarker(new MarkerOptions().position(RPI).title("RPI"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RPI, 18));
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {

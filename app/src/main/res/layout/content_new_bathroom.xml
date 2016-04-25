@@ -36,6 +36,78 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/noveltyRating"
+                android:text="Novelty" />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/noveltyRater"
+                android:layout_below="@+id/scrollView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:numStars="5"
+                android:rating="3"
+                android:stepSize="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cleanRating"
+                android:text="Cleanliness" />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cleanRater"
+                android:layout_below="@+id/scrollView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:numStars="5"
+                android:rating="3"
+                android:stepSize="1" />
+
+            <View android:background="#000000" android:layout_width = "fill_parent" android:layout_height="1dip" android:layout_centerVertical ="true"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Private Bathroom"
+                android:id="@+id/privateBathroom"
+                android:checked="false" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/floorLabel"
+                    android:text="Floor"
+                    android:layout_alignTop="@+id/scrollView2"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:id="@+id/floorNumberPicker"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_alignEnd="@+id/scrollView2"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <View android:background="#000000" android:layout_width = "fill_parent" android:layout_height="1dip" android:layout_centerVertical ="true"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/classLabel"
                 android:text="Class" />
 
@@ -92,7 +164,8 @@
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/GenderGroup">
+                android:id="@+id/GenderGroup"
+                android:layout_marginBottom="12dp">
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -116,46 +189,159 @@
                     android:checked="false" />
             </RadioGroup>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/noveltyRating"
-                android:text="Novelty" />
-
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/noveltyRater"
-                android:layout_below="@+id/scrollView"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:numStars="5"
-                android:rating="3"
-                android:stepSize="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/cleanRating"
-                android:text="Cleanliness" />
-
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/cleanRater"
-                android:layout_below="@+id/scrollView"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:numStars="5"
-                android:rating="3"
-                android:stepSize="1" />
+            <View android:background="#000000" android:layout_width = "fill_parent" android:layout_height="1dip" android:layout_centerVertical ="true"
+                android:layout_marginBottom="8dp" />
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Private Bathroom"
-                android:id="@+id/privateBathroom"
-                android:checked="false" />
+                android:text="Paper Towels"
+                android:id="@+id/paperTowelBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dryers"
+                android:id="@+id/dryersBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Handicap"
+                android:id="@+id/handicapBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hand Sanitizer"
+                android:id="@+id/sanitizerBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Changing Table"
+                android:id="@+id/changingBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feminine"
+                android:id="@+id/feminineBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medicine"
+                android:id="@+id/medicineBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contraception"
+                android:id="@+id/contraceptionBox"
+                android:checked="false"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/scrollView2"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/stallsLabel"
+                    android:text="Stalls"
+                    android:layout_alignTop="@+id/scrollView2"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:id="@+id/stallsNumberPicker"
+                    android:layout_alignTop="@+id/textView2"
+                    android:layout_alignEnd="@+id/scrollView2"
+                    android:textAlignment="center" >
+                </NumberPicker>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/scrollView2"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sinksLabel"
+                    android:text="Sinks"
+                    android:layout_alignTop="@+id/scrollView2"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:id="@+id/sinksNumberPicker"
+                    android:layout_alignTop="@+id/textView2"
+                    android:layout_alignEnd="@+id/scrollView2"
+                    android:textAlignment="center" >
+                </NumberPicker>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/scrollView2"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/urinalsLabel"
+                    android:text="Urinals"
+                    android:layout_alignTop="@+id/scrollView2"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:id="@+id/urinalsNumberPicker"
+                    android:layout_alignTop="@+id/textView2"
+                    android:layout_alignEnd="@+id/scrollView2"
+                    android:textAlignment="center" >
+                </NumberPicker>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

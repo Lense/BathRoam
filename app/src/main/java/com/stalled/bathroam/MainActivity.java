@@ -158,17 +158,20 @@ public class MainActivity extends AppCompatActivity implements
 
         // Set the intent for the new bathroom FAB
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.new_bathroom_fab);
+        assert fab1 != null;
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
+
                 if (mLastLocation == null) {
                     Toast.makeText(getApplicationContext(), "Cannot find your location!", Toast.LENGTH_LONG).show();
-                    return;
+                    intent1.putExtra("lat", 0.0);
+                    intent1.putExtra("lon", 0.0);
+                } else {
+                    intent1.putExtra("lat", mLastLocation.latitude);
+                    intent1.putExtra("lon", mLastLocation.longitude);
                 }
-
-                Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
-                intent1.putExtra("lat", mLastLocation.latitude);
-                intent1.putExtra("lon", mLastLocation.longitude);
 
                 startActivityForResult(intent1, 0);
             }

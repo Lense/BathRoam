@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:paddingLeft="12dp"
+	android:paddingRight="12dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.stalled.bathroam.DrilldownActivity"
     tools:showIn="@layout/activity_drilldown">
@@ -29,74 +31,51 @@
             android:layout_alignParentStart="true"
             android:id="@+id/linearLayout"
             tools:ignore="ObsoleteLayoutParam"
-            android:paddingTop="20dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text = "2.5"
-                android:textStyle="bold"
-                android:textSize="42sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentBottom="false"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/ratingOverall"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:layout_alignParentTop="true"/>
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ratingClean"
-                android:numStars="5"
-                android:rating="2.5"
-                android:stepSize=".1"
-                android:layout_gravity="center_horizontal"
-                style="@android:style/Widget.DeviceDefault.RatingBar.Small"
-                android:layout_alignParentBottom="false"
-                android:layout_alignEnd="@+id/textView2"
-                android:layout_alignBottom="@+id/ratingOverall"
-                android:layout_toLeftOf="@+id/ratingOverall"/>
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ratingNovel"
-                android:numStars="5"
-                android:rating="2.5"
-                android:stepSize=".1"
-                android:layout_gravity="center_horizontal"
-                style="@android:style/Widget.DeviceDefault.RatingBar.Small"
-                android:layout_toEndOf="@+id/ratingOverall"
-                android:layout_alignBottom="@+id/ratingOverall"
-                android:layout_toRightOf="@+id/ratingOverall"/>
+            android:paddingTop="26dp">
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/action_buttons">
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Add Rating"
+					android:layout_weight="1"
+					android:drawableLeft="@drawable/ic_menu_star"
+					android:paddingLeft="24dp"
+					android:paddingRight="24dp"/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Submit Photo"
+					android:layout_weight="1"
+					android:drawableLeft="@drawable/ic_menu_camera"
+					android:paddingLeft="24dp"
+					android:paddingRight="24dp"/>
+			</LinearLayout>
 
-            <GridLayout
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+				android:layout_below="@id/action_buttons"
                 android:columnCount="3"
-                android:rowCount="1"
-                android:id="@+id/gridLayout">
-
-            </GridLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Cleanliness"
-                android:id="@+id/textView2"
-                android:layout_toStartOf="@+id/ratingOverall"
-                android:layout_above="@+id/ratingClean"
-                android:layout_toLeftOf="@+id/ratingOverall"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Novelty"
-                android:id="@+id/textView3"
-                android:layout_toEndOf="@+id/ratingOverall"
-                android:layout_above="@+id/ratingNovel"
-                android:layout_toRightOf="@+id/ratingOverall"/>
+                android:rowCount="3"
+                android:id="@+id/boolTable">
+				<TableRow>
+					<TextView
+						android:text="Paper Towels"
+						android:gravity="center"
+						android:layout_weight="1"/>
+					<TextView
+						android:text="Urinals"
+						android:gravity="center"
+						android:layout_weight="1"/>
+					<TextView
+						android:text="Gender"
+						android:gravity="center"
+						android:layout_weight="1"/>
+				</TableRow>
+            </TableLayout>
 
 
         </RelativeLayout>

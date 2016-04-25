@@ -7,6 +7,9 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -55,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements
     private float mMinRating;
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
+    private SeekBar min_rating_slider;
+    private float min_rating;
+    private Marker mMarker;
+    private ArrayList<Bathroom> local_bathrooms = new ArrayList<Bathroom>();
+
+    // Will added this
+    private boolean DepartedForNewBathroom = false;
 	private com.stalled.bathroam.PreferenceDrawerFragment mPreferenceDrawerFragment;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private Toolbar mToolbar;
@@ -213,6 +223,11 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Open the bathroom drilldown when a marker is clicked
+
+        // Create a sample marker when the map is ready
+        LatLng RPI = new LatLng(42.730160, -73.678814);
+        mMarker = mMap.addMarker(new MarkerOptions().position(RPI).title("RPI"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RPI, 18));
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {

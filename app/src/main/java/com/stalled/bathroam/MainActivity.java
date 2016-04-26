@@ -4,20 +4,22 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
@@ -46,6 +48,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -190,21 +198,25 @@ public class MainActivity extends AppCompatActivity implements
 
         // Set the intent for the new bathroom FAB
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.new_bathroom_fab);
-        if(fab1 != null) {
-            fab1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mLastLocation == null) {
-                        Toast.makeText(getApplicationContext(), "Cannot find your location!", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
+
+        assert fab1 != null;
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(MainActivity.this, NewBathroomActivity.class);
+
+                if (mLastLocation == null) {
+                    Toast.makeText(getApplicationContext(), "Cannot find your location!", Toast.LENGTH_LONG).show();
+                    intent1.putExtra("lat", 0.0);
+                    intent1.putExtra("lon", 0.0);
+                } else {
                     intent1.putExtra("lat", mLastLocation.latitude);
                     intent1.putExtra("lon", mLastLocation.longitude);
-                    startActivityForResult(intent1, 0);
                 }
-            });
-        }
+
+                startActivityForResult(intent1, 0);
+            }
+        });
 
         // Set the intent for the find nearest bathroom FAB
         FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.nearest_bathroom_fab);
@@ -216,6 +228,18 @@ public class MainActivity extends AppCompatActivity implements
                 }
             });
         }
+
+        // Set the intent for the new bathroom FAB
+        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.take_picture_fab);
+
+        assert fab3 != null;
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 1);
+            }
+        });
     }
 
 
@@ -237,11 +261,6 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Open the bathroom drilldown when a marker is clicked
-
-        // Create a sample marker when the map is ready
-        LatLng RPI = new LatLng(42.730160, -73.678814);
-        mMarker = mMap.addMarker(new MarkerOptions().position(RPI).title("RPI"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RPI, 18));
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -469,14 +488,36 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                Snackbar.make(findViewById(R.id.new_bathroom_fab),
-                        "Thank you for your submission!",
-                        Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        if (resultCode == RESULT_OK)
+            switch (requestCode) {
+                case 0:
+                    try {
+                        Snackbar.make(findViewById(R.id.new_bathroom_fab),
+                                "Thank you for your submission!",
+                                Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } catch (NullPointerException e) {
+                        Log.d("Could not display", e.toString());
+                    }
+                    break;
+                case 1:
+                    Bundle extras = data.getExtras();
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    String result = "";
+                    try {
+                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    } catch (NullPointerException e) {
+                        Log.e("Error uploading", result);
+                    }
+                    byte[] byteArray = stream.toByteArray();
+                    result = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+                    Log.d("Hello", result);
+                    new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/", result);
+                    break;
             }
-        }
     }
 
 }

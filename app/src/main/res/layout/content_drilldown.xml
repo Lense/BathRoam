@@ -45,7 +45,8 @@
 					android:layout_weight="1"
 					android:drawableLeft="@drawable/ic_menu_star"
 					android:paddingLeft="24dp"
-					android:paddingRight="24dp"/>
+					android:paddingRight="24dp"
+					android:onClick="submitRating"/>
 				<Button
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -53,7 +54,8 @@
 					android:layout_weight="1"
 					android:drawableLeft="@drawable/ic_menu_camera"
 					android:paddingLeft="24dp"
-					android:paddingRight="24dp"/>
+					android:paddingRight="24dp"
+					android:onClick="takePhoto"/>
 
 			</LinearLayout>
 

@@ -1,16 +1,20 @@
 package com.stalled.bathroam;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.media.Rating;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.util.zip.Inflater;
 
 /*
@@ -151,4 +156,38 @@ public class DrilldownActivity extends AppCompatActivity {
 	    text.setTextColor(mBathroom.getContraceptive() ? R.color.colorPresent : R.color.colorAbsent);
 
     }
+
+	public void takePhoto( View view ) {
+		Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(cameraIntent, 0);
+	}
+
+	public void submitRating( View view ) {
+		DialogFragment newFragment = new RatingDialog();
+		newFragment.show(getFragmentManager(), "bathroamRating");
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK)
+            switch (requestCode) {
+			  case 0:
+				  Bundle extras = data.getExtras();
+				  Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+				  ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				  String result = "";
+				  try {
+					  imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				  } catch (NullPointerException e) {
+					  Log.e("Error uploading", result);
+				  }
+				  byte[] byteArray = stream.toByteArray();
+				  result = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+				  Log.d("Hello", result);
+				  new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/", result);
+				  break;
+		  }
+	}
 }

@@ -228,18 +228,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
             });
         }
-
-        // Set the intent for the new bathroom FAB
-        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.take_picture_fab);
-
-        assert fab3 != null;
-        fab3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 1);
-            }
-        });
     }
 
 
@@ -499,23 +487,6 @@ public class MainActivity extends AppCompatActivity implements
                     } catch (NullPointerException e) {
                         Log.d("Could not display", e.toString());
                     }
-                    break;
-                case 1:
-                    Bundle extras = data.getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    String result = "";
-                    try {
-                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    } catch (NullPointerException e) {
-                        Log.e("Error uploading", result);
-                    }
-                    byte[] byteArray = stream.toByteArray();
-                    result = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
-                    Log.d("Hello", result);
-                    new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/", result);
                     break;
             }
     }

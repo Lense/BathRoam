@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<!--String  mClass;-->
-	<MultiSelectListPreference android:key = "class"
+	<ListPreference android:key = "class"
 		android:title="Class"
 		android:entries="@array/bathroom_classes"
 		android:entryValues="@array/bathroom_classes"
 		android:defaultValue="@array/empty_array"/>
-	<MultiSelectListPreference android:key = "gender"
+	<ListPreference android:key = "gender"
 		android:title="Gender"
 		android:entries="@array/bathroom_genders"
 		android:entryValues="@array/bathroom_genders"

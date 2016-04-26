@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements
     private HashMap<String, Bathroom> mBathroomMap;
 
     // private members indicating the current preferences
-    private Set<String> mPrefClass;
-    private Set<String> mPrefGender;
+    private String mPrefClass;
+    private String mPrefGender;
     private boolean mPrefNovelty;
     private boolean mPrefCleanliness;
     private boolean mPrefPrivate;
@@ -276,8 +276,21 @@ public class MainActivity extends AppCompatActivity implements
                 .appendQueryParameter("ne_lat", String.valueOf(bounds.northeast.latitude))
                 .appendQueryParameter("ne_lon", String.valueOf(bounds.northeast.longitude))
                 .appendQueryParameter("sw_lat", String.valueOf(bounds.southwest.latitude))
-                .appendQueryParameter("sw_lon", String.valueOf(bounds.southwest.longitude));
+                .appendQueryParameter("sw_lon", String.valueOf(bounds.southwest.longitude))
+                .appendQueryParameter("gender", mPrefGender)
+                .appendQueryParameter("class", mPrefClass)
+                .appendQueryParameter("public", String.valueOf(mPrefPrivate))
+                .appendQueryParameter("paper", String.valueOf(mPrefPaper))
+                .appendQueryParameter("dryers", String.valueOf(mPrefDryers))
+                .appendQueryParameter("handicap", String.valueOf(mPrefHandicap))
+                .appendQueryParameter("sanitizer", String.valueOf(mPrefSanitizer))
+                .appendQueryParameter("baby", String.valueOf(mPrefBaby))
+                .appendQueryParameter("feminine", String.valueOf(mPrefFeminine))
+                .appendQueryParameter("medicine", String.valueOf(mPrefMedicine))
+                .appendQueryParameter("contraceptive", String.valueOf(mPrefContraceptive));
         String url = builder.build().toString();
+
+        Log.d(TAG, url);
 
         JsonArrayRequest jsArrReq = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -401,8 +414,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updatePreferences(){
-        mPrefClass = mPreferences.getStringSet("class", null);
-        mPrefGender = mPreferences.getStringSet("gender", null);
+        mPrefClass = mPreferences.getString("class", "none");
+        mPrefGender = mPreferences.getString("gender", "none");
         mPrefNovelty = mPreferences.getBoolean("novelty", false);
         mPrefCleanliness = mPreferences.getBoolean("cleanliness", false);
         mPrefPrivate = mPreferences.getBoolean("private", false);

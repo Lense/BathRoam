@@ -37,6 +37,20 @@ public class NewBathroomActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        int[] ids = new int[]{
+                R.id.floorNumberPicker,
+                R.id.sinksNumberPicker,
+                R.id.stallsNumberPicker,
+                R.id.urinalsNumberPicker
+        };
+        for (int id : ids ) {
+            NumberPicker np = (NumberPicker) findViewById(id);
+            assert np != null;
+            np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+            np.setMaxValue(1000);
+            np.setMinValue(1);
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {

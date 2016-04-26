@@ -10,6 +10,7 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 /**
  * Created by unonu on 4/26/16.
@@ -39,6 +40,7 @@ public class RatingDialog extends DialogFragment {
 				content += "novelty="+ Float.toString(mNovelty.getRating())+"&";
 				content += "cleanliness="+ Float.toString(mCleanliness.getRating());
 				new UploadBathroomTask().execute("http://toilets.lense.su/api/ratings/create", content);
+				Toast.makeText(getActivity(), "Rating submitted!", Toast.LENGTH_LONG).show();
 			}
 		});
 		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

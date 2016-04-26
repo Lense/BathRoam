@@ -490,10 +490,8 @@ public class MainActivity extends AppCompatActivity implements
             switch (requestCode) {
                 case 0:
                     try {
-                        Snackbar.make(findViewById(R.id.new_bathroom_fab),
-                                "Thank you for your submission!",
-                                Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        Toast.makeText(this, "Thank you for your submission!",
+                                Toast.LENGTH_LONG).show();
                     } catch (NullPointerException e) {
                         Log.d("Could not display", e.toString());
                     }

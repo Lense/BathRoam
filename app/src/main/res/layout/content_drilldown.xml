@@ -86,7 +86,7 @@
 						android:layout_weight="1"
 						android:tint="@color/colorAbsent"
 						android:id="@+id/aigaMale"
-						android:tintMode="add"/>
+						android:tintMode="multiply"/>
 					<ImageView
 						android:src="@drawable/aiga_women"
 						android:contentDescription="AIGA woman symbol"
@@ -95,7 +95,7 @@
 						android:layout_weight="1"
 						android:tint="@color/colorAbsent"
 						android:id="@+id/aigaFemale"
-						android:tintMode="add"
+						android:tintMode="multiply"
 						/>
 					<ImageView
 						android:src="@drawable/aiga_unisex"
@@ -105,7 +105,7 @@
 						android:layout_weight="1"
 						android:tint="@color/colorAbsent"
 						android:id="@+id/aigaUni"
-						android:tintMode="add"/>
+						android:tintMode="multiply"/>
 
 				</LinearLayout>
 			</LinearLayout>

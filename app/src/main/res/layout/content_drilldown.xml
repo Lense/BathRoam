@@ -22,20 +22,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <RelativeLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/linearLayout"
-            tools:ignore="ObsoleteLayoutParam"
-            android:paddingTop="26dp">
+        <LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:id="@+id/linearLayout"
+			tools:ignore="ObsoleteLayoutParam"
+			>
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:id="@+id/action_buttons">
+				android:id="@+id/action_buttons"
+				android:paddingTop="4dp"
+				android:paddingBottom="4dp">
 				<Button
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -52,33 +54,150 @@
 					android:drawableLeft="@drawable/ic_menu_camera"
 					android:paddingLeft="24dp"
 					android:paddingRight="24dp"/>
+
 			</LinearLayout>
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:paddingTop="4dp"
+				android:paddingBottom="4dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:text="Gender"
+					android:id="@+id/textView"
+					android:paddingBottom="2dp"/>
+				<LinearLayout
+					android:layout_gravity="center_horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					>
+					<ImageView
+						android:src="@drawable/aiga_men"
+						android:contentDescription="AIGA man symbol"
+						android:layout_width="64dp"
+						android:layout_height="64dp"
+						android:layout_weight="1"
+						android:tint="@color/colorAbsent"
+						android:id="@+id/aigaMale"
+						android:tintMode="add"/>
+					<ImageView
+						android:src="@drawable/aiga_women"
+						android:contentDescription="AIGA woman symbol"
+						android:layout_height="64dp"
+						android:layout_width="64dp"
+						android:layout_weight="1"
+						android:tint="@color/colorAbsent"
+						android:id="@+id/aigaFemale"
+						android:tintMode="add"
+						/>
+					<ImageView
+						android:src="@drawable/aiga_unisex"
+						android:contentDescription="AIGA unisex symbol"
+						android:layout_height="64dp"
+						android:layout_width="64dp"
+						android:layout_weight="1"
+						android:tint="@color/colorAbsent"
+						android:id="@+id/aigaUni"
+						android:tintMode="add"/>
+
+				</LinearLayout>
+			</LinearLayout>
+			<TableLayout
+				android:layout_width="fill_parent"
+				android:layout_height="192dp"
 				android:layout_below="@id/action_buttons"
-                android:columnCount="3"
-                android:rowCount="3"
-                android:id="@+id/boolTable">
-				<TableRow>
-					<TextView
-						android:text="Paper Towels"
-						android:gravity="center"
-						android:layout_weight="1"/>
-					<TextView
-						android:text="Urinals"
-						android:gravity="center"
-						android:layout_weight="1"/>
-					<TextView
-						android:text="Gender"
-						android:gravity="center"
-						android:layout_weight="1"/>
+				android:columnCount="3"
+				android:rowCount="3"
+				android:id="@+id/boolTable"
+				android:layout_gravity="center_vertical"
+				android:paddingTop="4dp"
+				android:paddingBottom="4dp">
+				<TableRow android:layout_height="wrap_content"
+							android:layout_width="match_parent">
+					<TextView android:text="Ammeneties"/>
 				</TableRow>
-            </TableLayout>
+				<TableRow android:layout_height="64dp"
+						  android:layout_width="fill_parent"
+						  android:layout_gravity="center_vertical"
+						  android:layout_weight="1"
+						  android:gravity="center_vertical">
+					<TextView android:text="Private"
+								android:id="@+id/drilldownPrivate"
+							  android:gravity="center"
+							  android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Paper Towels"
+								android:id="@+id/drilldownPaper"
+							  android:gravity="center"
+							  android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Hand Dryers"
+								android:id="@+id/drilldownDryers"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+				</TableRow>
+				<TableRow android:layout_height="64dp"
+						  android:layout_width="fill_parent"
+						  android:layout_gravity="center_vertical"
+						  android:layout_weight="1"
+						  android:gravity="center_vertical">
+					<TextView android:text="Handicap Accessible"
+								android:id="@+id/drilldownHandicap"
+							  android:gravity="center"
+							  android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Hand Sanitizer"
+								android:id="@+id/drilldownSanitizer"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Changing Table"
+								android:id="@+id/drilldownBaby"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+				</TableRow>
+				<TableRow android:layout_height="64dp"
+						  android:layout_width="fill_parent"
+						  android:layout_gravity="center_vertical"
+						  android:layout_weight="1"
+						  android:gravity="center_vertical">
+					<TextView android:text="Feminine Products"
+								android:id="@+id/drilldownFeminine"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Medicine"
+								android:id="@+id/drilldownMedicine"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Contraceptive"
+								android:id="@+id/drilldownContraceptive"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+				</TableRow>
+
+			</TableLayout>
 
 
-        </RelativeLayout>
+		</LinearLayout>
     </ScrollView>
 
 </android.support.v4.widget.NestedScrollView>

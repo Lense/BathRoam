@@ -72,6 +72,52 @@ public class Bathroom {
         return mComplete;
     }
 
+    public String  getBClass() {
+        return mClass;
+    }
+    public String  getGender() {
+        return mGender;
+    }
+    public int     getFloor() {
+        return mFloor;
+    }
+    public boolean getPrivate() {
+        return mPrivate;
+    }
+    public boolean getPaper() {
+        return mPaper;
+    }
+    public boolean getDryers() {
+        return mDryers;
+    }
+    public int     getStalls() {
+        return mStalls;
+    }
+    public boolean getHandicap() {
+        return mHandicap;
+    }
+    public int     getSinks() {
+        return mSinks;
+    }
+    public boolean getSanitizer() {
+        return mSanitizer;
+    }
+    public boolean getBaby() {
+        return mBaby;
+    }
+    public int     getUrinals() {
+        return mUrinals;
+    }
+    public boolean getFeminine() {
+        return mFeminine;
+    }
+    public boolean getMedicine() {
+        return mMedicine;
+    }
+    public boolean getContraceptive() {
+        return mContraceptive;
+    }
+
     public void setDetails(JSONObject details) throws JSONException {
 
         JSONArray loc = details.getJSONArray("loc");

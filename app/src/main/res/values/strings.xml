@@ -8,14 +8,15 @@
 	<string name="google_app_id">bathroam-fffff</string>
 
 	<string-array name="bathroom_classes">
-        <item>Pit</item>
-        <item>Trough</item>
-        <item>Outhouse</item>
+        <item>Multi</item>
+        <item>Single</item>
+        <item>Portable</item>
+		<item>Pit</item>
     </string-array>
     <string-array name="bathroom_genders">
         <item>Male</item>
         <item>Female</item>
-        <item>Gender Neutral</item>
+        <item>Unisex</item>
     </string-array>
 	<string-array name="empty_array"></string-array>
 

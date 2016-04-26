@@ -35,9 +35,9 @@ public class RatingDialog extends DialogFragment {
 			public void onClick(DialogInterface dialog, int id) {
 				//do the thing
 				String content = "bathroom_id="+mBathroomID+"&";
-				content += "mac_address="+Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID)+"&";
+				content += "mac_address="+Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID)+"&";
 				content += "novelty="+ Float.toString(mNovelty.getRating())+"&";
-				content += "cleanliness="+ Float.toString(mNovelty.getRating());
+				content += "cleanliness="+ Float.toString(mCleanliness.getRating());
 				new UploadBathroomTask().execute("http://toilets.lense.su/api/ratings/create", content);
 			}
 		});

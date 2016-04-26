@@ -90,12 +90,4 @@
 		android:src="@android:drawable/ic_menu_add"
 		android:layout_alignParentRight="true"
 		android:layout_above="@id/nearest_bathroom_fab"/>
-	<android.support.design.widget.FloatingActionButton
-		android:id="@+id/take_picture_fab"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/fab_margin"
-		android:src="@android:drawable/ic_menu_camera"
-		android:layout_alignParentRight="true"
-		android:layout_above="@id/new_bathroom_fab"/>
 </RelativeLayout>

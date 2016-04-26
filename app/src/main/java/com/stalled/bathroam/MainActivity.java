@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements
                 mLocalBathrooms.clear();
                 mBathroomMap.clear();
                 getLocalBathrooms();
-
 		    }
 
 		    public void onDrawerOpened(View drawerView) {
@@ -184,9 +183,7 @@ public class MainActivity extends AppCompatActivity implements
                             );
                         }
                     }
-
                 }
-
             });
         }
 

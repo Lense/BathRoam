@@ -130,11 +130,11 @@ public class DrilldownActivity extends AppCompatActivity {
 
 	    ImageView gender = (ImageView) findViewById(R.id.aigaMale);
 	    Log.d(TAG, mBathroom.getGender());
-	    gender.setColorFilter( mBathroom.getGender().equals("male") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
+	    gender.setColorFilter( mBathroom.getGender().equals("Male") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
 	    gender = (ImageView) findViewById(R.id.aigaFemale);
-	    gender.setColorFilter( mBathroom.getGender().equals("female") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
+	    gender.setColorFilter( mBathroom.getGender().equals("Female") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
 	    gender = (ImageView) findViewById(R.id.aigaUni);
-	    gender.setColorFilter( mBathroom.getGender().equals("neutral") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
+	    gender.setColorFilter( mBathroom.getGender().equals("Unisex") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
 
 	    TextView text = (TextView) findViewById(R.id.drilldownPrivate);
 	    text.setTextColor(mBathroom.getPrivate() ? R.color.colorPresent : R.color.colorAbsent);
@@ -164,6 +164,9 @@ public class DrilldownActivity extends AppCompatActivity {
 
 	public void submitRating( View view ) {
 		DialogFragment newFragment = new RatingDialog();
+		Bundle args = new Bundle();
+		args.putString("id", Integer.toString(mBathroomID));
+		newFragment.setArguments(args);
 		newFragment.show(getFragmentManager(), "bathroamRating");
 	}
 
@@ -186,7 +189,7 @@ public class DrilldownActivity extends AppCompatActivity {
 				  result = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
 				  Log.d("Hello", result);
-				  new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/", result);
+				  new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/images/create", "image="+result+"&bathroom_id="+Integer.toString(mBathroom.getID()));
 				  break;
 		  }
 	}

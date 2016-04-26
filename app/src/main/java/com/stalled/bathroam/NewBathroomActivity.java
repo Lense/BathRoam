@@ -68,22 +68,22 @@ public class NewBathroomActivity extends AppCompatActivity {
                 assert classGroup != null;
                 int classid = classGroup.getCheckedRadioButtonId();
                 if ( classid == R.id.multiPerson )
-                    classSelected = "multi";
+                    classSelected = "Multi";
                 else if ( classid == R.id.singleOccupancy)
-                    classSelected = "single";
+                    classSelected = "Single";
                 else if ( classid == R.id.portableRestroom )
-                    classSelected = "portable";
+                    classSelected = "Portable";
                 else if ( classid == R.id.pitToilet )
-                    classSelected = "pit";
+                    classSelected = "Pit";
 
                 assert genderGroup != null;
                 int genderid = genderGroup.getCheckedRadioButtonId();
                 if ( genderid == R.id.genderMale )
-                    genderSelected = "male";
+                    genderSelected = "Male";
                 else if ( genderid == R.id.genderFemale )
-                    genderSelected = "female";
+                    genderSelected = "Female";
                 else if ( genderid == R.id.genderNeutral )
-                    genderSelected = "neutral";
+                    genderSelected = "Unisex";
 
                 assert novelty != null;
                 float noveltyStars = novelty.getRating();

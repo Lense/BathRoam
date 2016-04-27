@@ -4,10 +4,26 @@
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent">
 
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="Cleanliness"
+		android:id="@+id/textView3"
+		android:layout_gravity="center_horizontal"/>
+
 	<RatingBar
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/rateClean"
+		android:layout_gravity="center_horizontal"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="Novelty"
+		android:id="@+id/textView4"
 		android:layout_gravity="center_horizontal"/>
 
 	<RatingBar

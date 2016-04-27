@@ -1,40 +1,41 @@
 package com.stalled.bathroam;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
-import android.media.Rating;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Typeface;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
-import java.util.zip.Inflater;
+import java.util.ArrayList;
 
 /*
 *
@@ -53,6 +54,8 @@ public class DrilldownActivity extends AppCompatActivity {
     private int mBathroomID;
     private String mTitle;
     private Bathroom mBathroom;
+	private ArrayList<Bitmap> mPhotos;
+	private ImageView mImageView;
     private final String TAG = "DrilldownActivity";
 
     @Override
@@ -73,14 +76,6 @@ public class DrilldownActivity extends AppCompatActivity {
 	   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 	   setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 	   ActionBar ab = getSupportActionBar();
 	   ab.setDisplayHomeAsUpEnabled(true);
 	   ab.setDisplayShowTitleEnabled(false);
@@ -93,7 +88,6 @@ public class DrilldownActivity extends AppCompatActivity {
 			 .appendPath("bathrooms")
 			 .appendQueryParameter("id", String.valueOf(mBathroomID));
 	   String url = builder.build().toString();
-	   Log.d("Hello",url);
 
 	   // Request bathroom details
 	   JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -115,46 +109,89 @@ public class DrilldownActivity extends AppCompatActivity {
 	   });
 
 	   RequestHandler.getInstance().addToReqQueue(request, "jreq", getApplicationContext());
+		updateImageList();
     }
 
     private void updateElements() {
 	    if (!mBathroom.isComplete()) return;
-	   Log.d(TAG, "update");
 	   RatingBar ratingClean = (RatingBar) findViewById(R.id.ratingClean);
 	   RatingBar ratingNovel = (RatingBar) findViewById(R.id.ratingNovel);
-	   ratingClean.setRating(mBathroom.getCleanliness());
-	   ratingNovel.setRating(mBathroom.getNovelty());
+	    if (ratingClean != null)
+		    ratingClean.setRating(mBathroom.getCleanliness());
+	    if (ratingNovel != null)
+		    ratingNovel.setRating(mBathroom.getNovelty());
 
-	   TextView ratingOverall = (TextView) findViewById(R.id.ratingOverall);
-	   ratingOverall.setText(String.format("%.1f", mBathroom.getRating()));
+	    TextView ratingOverall = (TextView) findViewById(R.id.ratingOverall);
+	    if (ratingOverall != null)
+		    ratingOverall.setText(String.format("%.1f", mBathroom.getRating()));
+
 
 	    ImageView gender = (ImageView) findViewById(R.id.aigaMale);
-	    Log.d(TAG, mBathroom.getGender());
-	    gender.setColorFilter( mBathroom.getGender().equals("Male") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
+	    if (gender != null)
+		    gender.setImageResource(mBathroom.getGender().equals("Male") ? R.drawable.aiga_men_select : R.drawable.aiga_men);
 	    gender = (ImageView) findViewById(R.id.aigaFemale);
-	    gender.setColorFilter( mBathroom.getGender().equals("Female") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
+	    if (gender != null)
+		    gender.setImageResource(mBathroom.getGender().equals("Female") ? R.drawable.aiga_women_select : R.drawable.aiga_women);
 	    gender = (ImageView) findViewById(R.id.aigaUni);
-	    gender.setColorFilter( mBathroom.getGender().equals("Unisex") ? R.color.colorPresent : R.color.colorAbsent, PorterDuff.Mode.MULTIPLY);
+	    if (gender != null)
+		    gender.setImageResource(mBathroom.getGender().equals("Unisex") ? R.drawable.aiga_unisex_select : R.drawable.aiga_unisex);
 
 	    TextView text = (TextView) findViewById(R.id.drilldownPrivate);
-	    text.setTextColor(mBathroom.getPrivate() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownPaper);
-	    text.setTextColor(mBathroom.getPaper() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownDryers);
-	    text.setTextColor(mBathroom.getDryers() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownHandicap);
-	    text.setTextColor(mBathroom.getHandicap() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownSanitizer);
-	    text.setTextColor(mBathroom.getSanitizer() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownBaby);
-	    text.setTextColor(mBathroom.getBaby() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownFeminine);
-	    text.setTextColor(mBathroom.getFeminine() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownMedicine);
-	    text.setTextColor(mBathroom.getMedicine() ? R.color.colorPresent : R.color.colorAbsent);
-	    text = (TextView) findViewById(R.id.drilldownContraceptive);
-	    text.setTextColor(mBathroom.getContraceptive() ? R.color.colorPresent : R.color.colorAbsent);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getPrivate() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getPrivate() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
 
+
+	    text = (TextView) findViewById(R.id.drilldownPaper);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getPaper() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getPaper() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+	    text = (TextView) findViewById(R.id.drilldownDryers);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getDryers() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getDryers() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+	    text = (TextView) findViewById(R.id.drilldownHandicap);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getHandicap() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getHandicap() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+	    text = (TextView) findViewById(R.id.drilldownSanitizer);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getSanitizer() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getSanitizer() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+	    text = (TextView) findViewById(R.id.drilldownBaby);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getBaby() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getBaby() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+	    text = (TextView) findViewById(R.id.drilldownFeminine);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getFeminine() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getFeminine() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+	    text = (TextView) findViewById(R.id.drilldownMedicine);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getMedicine() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getMedicine() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+	    text = (TextView) findViewById(R.id.drilldownContraceptive);
+	    if (text != null) {
+		    text.setTextColor(getResources().getColor(mBathroom.getContraceptive() ? R.color.colorPresent : R.color.colorAbsent));
+		    text.setTypeface(null, mBathroom.getContraceptive() ? Typeface.BOLD : Typeface.NORMAL);
+	    }
+
+		mImageView = (ImageView) findViewById(R.id.drilldownImage);
     }
 
 	public void takePhoto( View view ) {
@@ -177,20 +214,100 @@ public class DrilldownActivity extends AppCompatActivity {
 			  case 0:
 				  Bundle extras = data.getExtras();
 				  Bitmap imageBitmap = (Bitmap) extras.get("data");
-
+//				  Log.d(TAG, "img height bef "+imageBitmap.getHeight());
+//				  imageBitmap = getResizedBitmap(imageBitmap, 200, 200);
+//				  Log.d(TAG, "img height aft "+imageBitmap.getHeight());
 				  ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				  String result = "";
-				  try {
+				  if (imageBitmap != null) {
 					  imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-				  } catch (NullPointerException e) {
-					  Log.e("Error uploading", result);
 				  }
 				  byte[] byteArray = stream.toByteArray();
 				  result = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
-				  Log.d("Hello", result);
-				  new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/images/create", "image="+result+"&bathroom_id="+Integer.toString(mBathroom.getID()));
+					Log.d(TAG, result);
+				  new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/images/create",
+						"image="+result+"&bathroom_id="+Integer.toString(mBathroom.getID()));
+				  break;
+			  default:
 				  break;
 		  }
+	}
+
+	private void updateImageList() {
+		// Build the URL for the request
+		mPhotos = new ArrayList<>();
+		Uri.Builder builder = new Uri.Builder();
+		builder.scheme("http")
+				.authority("104.131.49.58")
+				.appendPath("api")
+				.appendPath("bathrooms")
+				.appendPath(String.valueOf(mBathroomID))
+				.appendPath("images");
+		String url = builder.build().toString();
+
+		Log.d(TAG, url);
+
+		// Request bathroom details
+		JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+			@Override
+			public void onResponse(JSONArray response) {
+				BitmapFactory.Options opts = new BitmapFactory.Options();
+				opts.inSampleSize = 8;
+				for (int i = 0; i < response.length(); i++) {
+//				if (response.length() > 2) {
+					try {
+						Log.d(TAG, "SLDkhfalsjdf");
+						// Parse the JSON object for bathroom information
+						JSONObject meta = response.getJSONObject(i);
+						Log.d(TAG, meta.getString("image"));
+						byte[] raw = Base64.decode(getResources().getString(R.string.spoof_image), Base64.DEFAULT);
+						Log.d(TAG, "aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+						Bitmap image = BitmapFactory.decodeByteArray(raw, 0, raw.length, opts);
+						Log.d(TAG, "heeeeeeeeeeeeeeerrrrrrrreeeeeeeeeeeee");
+						mPhotos.add(image);
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+//				}
+				}
+				if (mImageView != null && mPhotos.size() > 0) {
+					mImageView.setImageBitmap(mPhotos.get(0));
+				}
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				Toast.makeText(getApplicationContext(), "Failed to retrieve images.", Toast.LENGTH_SHORT).show();
+				Log.w(TAG, error);
+			}
+		});
+		RequestHandler.getInstance().addToReqQueue(request, "jreq", getApplicationContext());
+	}
+
+	private Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+
+		int width = bm.getWidth();
+
+		int height = bm.getHeight();
+
+		float scaleWidth = ((float) newWidth) / width;
+
+		float scaleHeight = ((float) newHeight) / height;
+
+// create a matrix for the manipulation
+
+		Matrix matrix = new Matrix();
+
+// resize the bit map
+
+		matrix.postScale(scaleWidth, scaleHeight);
+
+// recreate the new Bitmap
+
+		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+
+		return resizedBitmap;
+
 	}
 }

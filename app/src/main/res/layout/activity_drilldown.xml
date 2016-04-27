@@ -22,14 +22,15 @@
 			android:fitsSystemWindows="true"
 			app:contentScrim="?attr/colorPrimary"
 			app:layout_scrollFlags="scroll|exitUntilCollapsed"
-			android:background="@drawable/ancient_rome"
-			android:backgroundTint="#aaa"
-			android:backgroundTintMode="multiply">
+			>
 			<ImageView android:layout_width="match_parent"
 					   android:layout_height="fill_parent"
 					   android:contentDescription="Image of bathroom"
 					   android:src="@drawable/ancient_rome"
-					   android:scaleType="centerCrop"/>
+					   android:scaleType="centerCrop"
+					   android:id="@+id/drilldownImage"
+					   android:tint="#666"
+					   android:tintMode="multiply"/>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"

@@ -24,7 +24,6 @@ public class PreferenceDrawerFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
-		// something something preference manager
 	}
 
 	@Override
@@ -64,7 +63,6 @@ public class PreferenceDrawerFragment extends Fragment {
 				if (!isAdded()) {
 					return;
 				}
-//				getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 			}
 
 			@Override
@@ -73,7 +71,6 @@ public class PreferenceDrawerFragment extends Fragment {
 				if (!isAdded()) {
 					return;
 				}
-//				getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 			}
 		};
 		// Defer code dependent on restoration of previous instance state.

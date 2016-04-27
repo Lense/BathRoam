@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Bathroom {
-    private int     mId;
+    private int 	mID;
     private LatLng  mLocation;
     private String  mClass;
     private String  mGender;
@@ -32,7 +32,7 @@ public class Bathroom {
     public Bathroom() {}
 
     public Bathroom(int id, LatLng location, float novelty, float cleanliness) {
-        mId = id;
+        mID = id;
         mLocation = location;
         mNovelty = novelty;
         mCleanliness = cleanliness;
@@ -61,7 +61,7 @@ public class Bathroom {
     }
 
     public int getID() {
-        return mId;
+        return mID;
     }
 
     public LatLng getLocation() {
@@ -119,11 +119,9 @@ public class Bathroom {
     }
 
     public void setDetails(JSONObject details) throws JSONException {
-
         JSONArray loc = details.getJSONArray("loc");
-        mId = details.getInt("id");
+        mID = details.getInt("id");
         mLocation = new LatLng(loc.getDouble(0), loc.getDouble(1));
-        //mRating = (float) details.getDouble("rating");
         mClass = details.getString("class");
         mGender = details.getString("gender");
         mNovelty = (float) details.getDouble("novelty");
@@ -163,7 +161,7 @@ public class Bathroom {
         Bathroom c = (Bathroom) o;
 
         // Compare the data members and return accordingly
-        return c.mId == this.mId;
+        return c.mID == this.mID;
     }
 
 }

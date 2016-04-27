@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.media.Rating;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -12,9 +11,6 @@ import android.view.View;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-/**
- * Created by unonu on 4/26/16.
- */
 public class RatingDialog extends DialogFragment {
 	String mBathroomID;
 	RatingBar mNovelty;

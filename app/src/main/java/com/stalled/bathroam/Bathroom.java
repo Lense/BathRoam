@@ -7,9 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Bathroom {
-    private int     mId;
+    private int 	mID;
     private LatLng  mLocation;
-    private float   mRating;
     private String  mClass;
     private String  mGender;
     private float   mNovelty;
@@ -32,11 +31,11 @@ public class Bathroom {
 
     public Bathroom() {}
 
-    public Bathroom(int id, LatLng location, float rating) {
-        mId = id;
+    public Bathroom(int id, LatLng location, float novelty, float cleanliness) {
+        mID = id;
         mLocation = location;
-        mRating = rating;
-
+        mNovelty = novelty;
+        mCleanliness = cleanliness;
         mComplete = false;
     }
 
@@ -50,10 +49,7 @@ public class Bathroom {
     }
 
     public float getRating() {
-        if (mComplete) {
-            mRating = (mCleanliness + mNovelty) / 2;
-        }
-        return mRating;
+        return (mCleanliness + mNovelty) / 2.0f;
     }
 
     public float getCleanliness() {
@@ -65,7 +61,7 @@ public class Bathroom {
     }
 
     public int getID() {
-        return mId;
+        return mID;
     }
 
     public LatLng getLocation() {
@@ -76,12 +72,56 @@ public class Bathroom {
         return mComplete;
     }
 
-    public void setDetails(JSONObject details) throws JSONException {
+    public String  getBClass() {
+        return mClass;
+    }
+    public String  getGender() {
+        return mGender;
+    }
+    public int     getFloor() {
+        return mFloor;
+    }
+    public boolean getPrivate() {
+        return mPrivate;
+    }
+    public boolean getPaper() {
+        return mPaper;
+    }
+    public boolean getDryers() {
+        return mDryers;
+    }
+    public int     getStalls() {
+        return mStalls;
+    }
+    public boolean getHandicap() {
+        return mHandicap;
+    }
+    public int     getSinks() {
+        return mSinks;
+    }
+    public boolean getSanitizer() {
+        return mSanitizer;
+    }
+    public boolean getBaby() {
+        return mBaby;
+    }
+    public int     getUrinals() {
+        return mUrinals;
+    }
+    public boolean getFeminine() {
+        return mFeminine;
+    }
+    public boolean getMedicine() {
+        return mMedicine;
+    }
+    public boolean getContraceptive() {
+        return mContraceptive;
+    }
 
+    public void setDetails(JSONObject details) throws JSONException {
         JSONArray loc = details.getJSONArray("loc");
-        mId = details.getInt("id");
+        mID = details.getInt("id");
         mLocation = new LatLng(loc.getDouble(0), loc.getDouble(1));
-        //mRating = (float) details.getDouble("rating");
         mClass = details.getString("class");
         mGender = details.getString("gender");
         mNovelty = (float) details.getDouble("novelty");
@@ -121,7 +161,7 @@ public class Bathroom {
         Bathroom c = (Bathroom) o;
 
         // Compare the data members and return accordingly
-        return c.mId == this.mId;
+        return c.mID == this.mID;
     }
 
 }

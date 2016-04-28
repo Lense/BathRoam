@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:paddingLeft="12dp"
+	android:paddingRight="12dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.stalled.bathroam.DrilldownActivity"
     tools:showIn="@layout/activity_drilldown">
@@ -20,86 +22,180 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <RelativeLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/linearLayout"
-            tools:ignore="ObsoleteLayoutParam"
-            android:paddingTop="20dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text = "2.5"
-                android:textStyle="bold"
-                android:textSize="42sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentBottom="false"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/ratingOverall"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:layout_alignParentTop="true"/>
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ratingClean"
-                android:numStars="5"
-                android:rating="2.5"
-                android:stepSize=".1"
-                android:layout_gravity="center_horizontal"
-                style="@android:style/Widget.DeviceDefault.RatingBar.Small"
-                android:layout_alignParentBottom="false"
-                android:layout_alignEnd="@+id/textView2"
-                android:layout_alignBottom="@+id/ratingOverall"
-                android:layout_toLeftOf="@+id/ratingOverall"/>
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ratingNovel"
-                android:numStars="5"
-                android:rating="2.5"
-                android:stepSize=".1"
-                android:layout_gravity="center_horizontal"
-                style="@android:style/Widget.DeviceDefault.RatingBar.Small"
-                android:layout_toEndOf="@+id/ratingOverall"
-                android:layout_alignBottom="@+id/ratingOverall"
-                android:layout_toRightOf="@+id/ratingOverall"/>
+        <LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:id="@+id/linearLayout"
+			tools:ignore="ObsoleteLayoutParam"
+			>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/action_buttons"
+				android:paddingTop="4dp"
+				android:paddingBottom="4dp">
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Add Rating"
+					android:layout_weight="1"
+					android:drawableLeft="@drawable/ic_menu_star"
+					android:paddingLeft="24dp"
+					android:paddingRight="24dp"
+					android:onClick="submitRating"/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Submit Photo"
+					android:layout_weight="1"
+					android:drawableLeft="@drawable/ic_menu_camera"
+					android:paddingLeft="24dp"
+					android:paddingRight="24dp"
+					android:onClick="takePhoto"/>
 
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="3"
-                android:rowCount="1"
-                android:id="@+id/gridLayout">
+			</LinearLayout>
 
-            </GridLayout>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:paddingTop="4dp"
+				android:paddingBottom="4dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Cleanliness"
-                android:id="@+id/textView2"
-                android:layout_toStartOf="@+id/ratingOverall"
-                android:layout_above="@+id/ratingClean"
-                android:layout_toLeftOf="@+id/ratingOverall"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:text="Gender"
+					android:id="@+id/textView"
+					android:paddingBottom="2dp"/>
+				<LinearLayout
+					android:layout_gravity="center_horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					>
+					<ImageView
+						android:src="@drawable/aiga_men"
+						android:contentDescription="AIGA man symbol"
+						android:layout_width="64dp"
+						android:layout_height="64dp"
+						android:layout_weight="1"
+						android:id="@+id/aigaMale"
+						/>
+					<ImageView
+						android:src="@drawable/aiga_women"
+						android:contentDescription="AIGA woman symbol"
+						android:layout_height="64dp"
+						android:layout_width="64dp"
+						android:layout_weight="1"
+						android:id="@+id/aigaFemale"
+						/>
+					<ImageView
+						android:src="@drawable/aiga_unisex"
+						android:contentDescription="AIGA unisex symbol"
+						android:layout_height="64dp"
+						android:layout_width="64dp"
+						android:layout_weight="1"
+						android:id="@+id/aigaUni"
+						/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Novelty"
-                android:id="@+id/textView3"
-                android:layout_toEndOf="@+id/ratingOverall"
-                android:layout_above="@+id/ratingNovel"
-                android:layout_toRightOf="@+id/ratingOverall"/>
+				</LinearLayout>
+			</LinearLayout>
+			<TableLayout
+				android:layout_width="fill_parent"
+				android:layout_height="192dp"
+				android:layout_below="@id/action_buttons"
+				android:columnCount="3"
+				android:rowCount="3"
+				android:id="@+id/boolTable"
+				android:layout_gravity="center_vertical"
+				android:paddingTop="4dp"
+				android:paddingBottom="4dp">
+				<TableRow android:layout_height="wrap_content"
+							android:layout_width="match_parent">
+					<TextView android:text="Amenities"/>
+				</TableRow>
+				<TableRow android:layout_height="64dp"
+						  android:layout_width="fill_parent"
+						  android:layout_gravity="center_vertical"
+						  android:layout_weight="1"
+						  android:gravity="center_vertical">
+					<TextView android:text="Private"
+								android:id="@+id/drilldownPrivate"
+							  android:gravity="center"
+							  android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Paper Towels"
+								android:id="@+id/drilldownPaper"
+							  android:gravity="center"
+							  android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Hand Dryers"
+								android:id="@+id/drilldownDryers"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+				</TableRow>
+				<TableRow android:layout_height="64dp"
+						  android:layout_width="fill_parent"
+						  android:layout_gravity="center_vertical"
+						  android:layout_weight="1"
+						  android:gravity="center_vertical">
+					<TextView android:text="Handicap Accessible"
+								android:id="@+id/drilldownHandicap"
+							  android:gravity="center"
+							  android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Hand Sanitizer"
+								android:id="@+id/drilldownSanitizer"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Changing Table"
+								android:id="@+id/drilldownBaby"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+				</TableRow>
+				<TableRow android:layout_height="64dp"
+						  android:layout_width="fill_parent"
+						  android:layout_gravity="center_vertical"
+						  android:layout_weight="1"
+						  android:gravity="center_vertical">
+					<TextView android:text="Feminine Products"
+								android:id="@+id/drilldownFeminine"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Medicine"
+								android:id="@+id/drilldownMedicine"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+					<TextView android:text="Contraceptive"
+								android:id="@+id/drilldownContraceptive"
+								android:gravity="center"
+								android:layout_weight="1"
+							  android:layout_width="0dp"
+							  android:textColor="@color/colorAbsent"/>
+				</TableRow>
+
+			</TableLayout>
 
 
-        </RelativeLayout>
+		</LinearLayout>
     </ScrollView>
 
 </android.support.v4.widget.NestedScrollView>

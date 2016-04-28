@@ -23,7 +23,7 @@ public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
     @Override
     protected Void doInBackground(String... params) {
 
-        HttpURLConnection httpconnect;
+        HttpURLConnection httpConnect;
         URL url;
 
         try {
@@ -32,18 +32,18 @@ public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
 
             try {
 
-                httpconnect = (HttpURLConnection) url.openConnection();
-                httpconnect.setDoOutput(true);
-                httpconnect.setDoInput(true);
-                httpconnect.setInstanceFollowRedirects(false);
-                httpconnect.setChunkedStreamingMode(0);
+                httpConnect = (HttpURLConnection) url.openConnection();
+                httpConnect.setDoOutput(true);
+                httpConnect.setDoInput(true);
+                httpConnect.setInstanceFollowRedirects(false);
+                httpConnect.setChunkedStreamingMode(0);
 
                 try {
 
-                    httpconnect.setRequestMethod("POST");
-                    httpconnect.setUseCaches(false);
+                    httpConnect.setRequestMethod("POST");
+                    httpConnect.setUseCaches(false);
 
-                    DataOutputStream wr = new DataOutputStream(httpconnect.getOutputStream());
+                    DataOutputStream wr = new DataOutputStream(httpConnect.getOutputStream());
                     wr.writeBytes(params[1]);
                     wr.flush();
                     wr.close();
@@ -53,7 +53,7 @@ public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
 
                     try {
 
-                        InputStream responseStream = new BufferedInputStream(httpconnect.getInputStream());
+                        InputStream responseStream = new BufferedInputStream(httpConnect.getInputStream());
                         BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
                         StringBuilder stringBuilder = new StringBuilder();
                         while ((line = responseStreamReader.readLine()) != null)
@@ -76,7 +76,7 @@ public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
                     Log.e("Error", e.toString());
                 } finally {
 
-                    httpconnect.disconnect();
+                    httpConnect.disconnect();
 
                 }
 

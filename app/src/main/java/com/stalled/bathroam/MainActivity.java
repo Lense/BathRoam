@@ -4,24 +4,20 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,15 +44,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements
     OnMapReadyCallback,
@@ -69,16 +58,11 @@ public class MainActivity extends AppCompatActivity implements
     private float mMinRating;
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
-    private SeekBar min_rating_slider;
-    private float min_rating;
-    private Marker mMarker;
-    private ArrayList<Bathroom> local_bathrooms = new ArrayList<Bathroom>();
 
     // Will added this
-    private boolean DepartedForNewBathroom = false;
 	private com.stalled.bathroam.PreferenceDrawerFragment mPreferenceDrawerFragment;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private Toolbar mToolbar;
+	private LinearLayout mToolbar;
     private SharedPreferences mPreferences;
 
     private GoogleApiClient mClient;
@@ -114,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         updatePreferences();
 
-	    mDrawerToggle = new ActionBarDrawerToggle( this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+	    mDrawerToggle = new ActionBarDrawerToggle( this, mDrawerLayout, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 		    public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 
@@ -124,6 +108,10 @@ public class MainActivity extends AppCompatActivity implements
                 mLocalBathrooms.clear();
                 mBathroomMap.clear();
                 getLocalBathrooms();
+				if (mPrefCleanliness || mPrefNovelty)
+					hideRatingBar( true );
+				else
+					hideRatingBar( false );
 		    }
 
 		    public void onDrawerOpened(View drawerView) {
@@ -140,9 +128,12 @@ public class MainActivity extends AppCompatActivity implements
             .findFragmentById(R.id.map);
 	    mapFragment.getMapAsync(this);
 
-	    // Initialize the SeekBar listener for minimum bathroom ratings
-	    mMinRating = 0;
-	    SeekBar minRatingSlider = (SeekBar) findViewById(R.id.rating);
+		// Mark the toolbar for use later
+		mToolbar = (LinearLayout) findViewById(R.id.rating_bar);
+
+		// Initialize the SeekBar listener for minimum bathroom ratings
+		mMinRating = 0;
+		SeekBar minRatingSlider = (SeekBar) findViewById(R.id.rating);
         if(minRatingSlider != null){
             minRatingSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -436,6 +427,11 @@ public class MainActivity extends AppCompatActivity implements
         mPrefFeminine = mPreferences.getBoolean("feminine", false);
         mPrefMedicine = mPreferences.getBoolean("medicine", false);
         mPrefContraceptive = mPreferences.getBoolean("contraceptive", false);
+		if (mPrefCleanliness || mPrefNovelty)
+			hideRatingBar( true );
+		else
+			hideRatingBar( false );
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -484,7 +480,37 @@ public class MainActivity extends AppCompatActivity implements
         mClient.disconnect();
     }
 
-    @Override
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		int id = item.getItemId();
+		//noinspection SimplifiableIfStatement
+		if (id == R.id.action_settings) {
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK)
             switch (requestCode) {
@@ -498,5 +524,10 @@ public class MainActivity extends AppCompatActivity implements
                     break;
             }
     }
+
+	private void hideRatingBar( boolean b ) {
+		if (mToolbar != null)
+			mToolbar.setScaleY(b ? 1 : 0);
+	}
 
 }

@@ -34,13 +34,24 @@
 	</FrameLayout>
 
 
-	<Toolbar
+	<LinearLayout
 	android:layout_width="match_parent"
-	android:layout_height="48dp"
+	android:layout_height="64dp"
 	android:layout_alignParentBottom="true"
 	android:id="@+id/rating_bar"
 	android:background="#fff"
-	>
+	android:orientation="horizontal"
+	android:gravity="center_vertical"
+		android:paddingLeft="8dp"
+		android:paddingRight="8dp"
+		android:paddingTop="4dp"
+		android:paddingBottom="4dp">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Minimum\nRating"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textStyle="bold"/>
 		<TextView
 		android:id="@+id/rating_value"
 		android:text="0.0"
@@ -72,7 +83,7 @@
 		android:layout_centerHorizontal="true"
 		android:layout_alignParentRight="true"
 		android:gravity="right"/>
-	</Toolbar>
+	</LinearLayout>
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/nearest_bathroom_fab"

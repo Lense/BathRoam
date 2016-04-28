@@ -44,6 +44,7 @@ public class RatingDialog extends DialogFragment {
 				// canceled
 			}
 		});
+		builder.setTitle("Submit Rating");
 
 		return builder.create();
 	}

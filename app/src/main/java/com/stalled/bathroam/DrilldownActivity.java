@@ -6,14 +6,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Base64InputStream;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,7 +40,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.RunnableFuture;
 
 /*
 *
@@ -56,7 +70,9 @@ public class DrilldownActivity extends AppCompatActivity {
     private Bathroom mBathroom;
 	private ArrayList<Bitmap> mPhotos;
 	private ImageView mImageView;
+	private Uri mUri;
     private final String TAG = "DrilldownActivity";
+	private AnimationDrawable mAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,19 +230,13 @@ public class DrilldownActivity extends AppCompatActivity {
 			  case 0:
 				  Bundle extras = data.getExtras();
 				  Bitmap imageBitmap = (Bitmap) extras.get("data");
-//				  Log.d(TAG, "img height bef "+imageBitmap.getHeight());
-//				  imageBitmap = getResizedBitmap(imageBitmap, 200, 200);
-//				  Log.d(TAG, "img height aft "+imageBitmap.getHeight());
 				  ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				  String result = "";
-				  if (imageBitmap != null) {
-					  imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-				  }
+				  if (imageBitmap != null)
+					  imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 				  byte[] byteArray = stream.toByteArray();
-				  result = Base64.encodeToString(byteArray, Base64.DEFAULT);
-					Log.d(TAG, result);
+				  String result = Base64.encodeToString(byteArray, Base64.URL_SAFE);
 				  new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/images/create",
-						"image="+result+"&bathroom_id="+Integer.toString(mBathroom.getID()));
+						  "image="+result+"&bathroom_id="+Integer.toString(mBathroom.getID()));
 				  break;
 			  default:
 				  break;
@@ -251,28 +261,19 @@ public class DrilldownActivity extends AppCompatActivity {
 		JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
-				BitmapFactory.Options opts = new BitmapFactory.Options();
-				opts.inSampleSize = 8;
 				for (int i = 0; i < response.length(); i++) {
-//				if (response.length() > 2) {
 					try {
-						Log.d(TAG, "SLDkhfalsjdf");
 						// Parse the JSON object for bathroom information
 						JSONObject meta = response.getJSONObject(i);
-						Log.d(TAG, meta.getString("image"));
-						byte[] raw = Base64.decode(getResources().getString(R.string.spoof_image), Base64.DEFAULT);
-						Log.d(TAG, "aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-						Bitmap image = BitmapFactory.decodeByteArray(raw, 0, raw.length, opts);
-						Log.d(TAG, "heeeeeeeeeeeeeeerrrrrrrreeeeeeeeeeeee");
+						byte[] raw = Base64.decode(meta.getString("image"), Base64.URL_SAFE);
+						Bitmap image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 						mPhotos.add(image);
-
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-//				}
 				}
 				if (mImageView != null && mPhotos.size() > 0) {
-					mImageView.setImageBitmap(mPhotos.get(0));
+					startAnimation();
 				}
 			}
 		}, new Response.ErrorListener() {
@@ -285,29 +286,20 @@ public class DrilldownActivity extends AppCompatActivity {
 		RequestHandler.getInstance().addToReqQueue(request, "jreq", getApplicationContext());
 	}
 
-	private Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+	class Animator implements Runnable {
+		public void run() {
+			mAnimation.start();
+		}
+	}
 
-		int width = bm.getWidth();
-
-		int height = bm.getHeight();
-
-		float scaleWidth = ((float) newWidth) / width;
-
-		float scaleHeight = ((float) newHeight) / height;
-
-// create a matrix for the manipulation
-
-		Matrix matrix = new Matrix();
-
-// resize the bit map
-
-		matrix.postScale(scaleWidth, scaleHeight);
-
-// recreate the new Bitmap
-
-		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-
-		return resizedBitmap;
-
+	private void startAnimation() {
+		mAnimation = new AnimationDrawable();
+		for (int i=0; i < mPhotos.size(); i++)
+			mAnimation.addFrame(new BitmapDrawable(mPhotos.get(i)), 8000);
+		mAnimation.setEnterFadeDuration(1000);
+		mAnimation.setExitFadeDuration(1000);
+		mAnimation.setOneShot(false);
+		mImageView.setImageDrawable(mAnimation);
+		mImageView.post(new Animator());
 	}
 }

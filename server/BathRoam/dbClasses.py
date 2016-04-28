@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Bathroom(db.Model):
+	__tablename__ = 'bathrooms'
+
 	bathroom_id = db.Column(db.Integer, primary_key=True)
 	bClass = db.Column(db.String(32))
 	gender = db.Column(db.String(32))
@@ -25,6 +27,8 @@ class Bathroom(db.Model):
 	contraceptive = db.Column(db.Boolean())
 	latitude = db.Column(db.Numeric(precision=9, scale=6, asdecimal=True))
 	longitude = db.Column(db.Numeric(precision=9, scale=6, asdecimal=True))
+	ratings = db.relationship('Rating')
+	images = db.relationship('Image')
 
 	def __init__(self, bClass, gender, novelty, cleanliness, floor, public, paper, dryers, stalls, handicap, sinks, sanitizer, baby, urinals, feminine, medicine, contraceptive, latitude, longitude):
 		self.bClass = bClass
@@ -51,8 +55,9 @@ class Bathroom(db.Model):
 		return '<Bathroom %r>' % self.bathroom_id
 
 class Rating(db.Model):
+	__tablename__ = 'ratings'
 	rating_id = db.Column(db.Integer, primary_key=True)
-	bathroom_id = db.Column(db.Integer)
+	bathroom_id = db.Column(db.Integer, db.ForeignKey('bathrooms.bathroom_id'))
 	mac_address = db.Column(db.String(18))
 	novelty = db.Column(db.Float())
 	cleanliness = db.Column(db.Float())
@@ -65,3 +70,13 @@ class Rating(db.Model):
 
 	def __repr__(self):
 		return '<Rating %r for %r>' % self.rating_id, self.bathroom_id
+
+class Image(db.Model):
+	__tablename__ = 'images'
+	image_id = db.Column(db.Integer, primary_key=True)
+	bathroom_id = db.Column(db.Integer, db.ForeignKey('bathrooms.bathroom_id'))
+	image = db.Column(db.Text)
+
+	def __init__(self, bathroom_id, image):
+		self.bathroom_id = bathroom_id
+		self.image = image

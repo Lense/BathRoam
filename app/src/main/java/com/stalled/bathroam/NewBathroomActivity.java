@@ -17,17 +17,17 @@ public class NewBathroomActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// grab location from MainActivity
+		// Grab location from MainActivity
 		Bundle extra = getIntent().getExtras();
 		final double Lat = extra.getDouble("lat");
 		final double Lon = extra.getDouble("lon");
 
-		// build activity
+		// Build activity
 		setContentView(R.layout.activity_new_bathroom);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-		// set the min/max values for all four of the number pickers
+		// Set the min/max values for all four of the number pickers
 		int[] ids = new int[]{
 				R.id.floorNumberPicker,
 				R.id.sinksNumberPicker,
@@ -43,13 +43,13 @@ public class NewBathroomActivity extends AppCompatActivity {
 		for (int i=0;i<4;++i) {
 			NumberPicker np = (NumberPicker) findViewById(ids[i]);
 			assert np != null;
-			// do not focus a number picker when the activity starts
+			// Do not focus a number picker when the activity starts
 			np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 			np.setMaxValue(maxs[i]);
 			np.setMinValue(mins[i]);
 		}
 
-		// build the submit button
+		// Build the submit button
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 		assert fab != null;
 		fab.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +118,7 @@ public class NewBathroomActivity extends AppCompatActivity {
 				int sinks = sinksPicker.getValue();
 				int urinals = urinalPicker.getValue();
 
-				// package the POST data for sending
+				// Package the POST data for sending
 				String content = "lat="+Double.toString(Lat)+"&";
 				content += "lon="+Double.toString(Lon)+"&";
 				content += "class="+classSelected+"&";
@@ -139,16 +139,16 @@ public class NewBathroomActivity extends AppCompatActivity {
 				content += "medicine="+( medicine ? "True" : "False")+"&";
 				content += "contraceptive="+( contraceptive ? "True" : "False")+"";
 
-				// execute asynchronous task to upload bathroom POST data
+				// Execute asynchronous task to upload bathroom POST data
 				new UploadBathroomTask().execute("http://toilets.lense.su/api/bathrooms/create", content);
 
-				// we're done here! return to MainActivity
+				// We're done here! return to MainActivity
 				setResult(RESULT_OK);
 				NewBathroomActivity.this.finish();
 			}
 		});
 
-		// make sure the back button works
+		// Make sure the back button works
 		try {
 			ActionBar ab = getSupportActionBar();
 			assert ab != null;

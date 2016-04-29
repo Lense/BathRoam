@@ -21,78 +21,78 @@ import java.net.URL;
 
 // Takes in a string to upload to the server in the form of POST data
 public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
-    @Override
-    protected Void doInBackground(String... params) {
+	@Override
+	protected Void doInBackground(String... params) {
 
-        // params[0] = URL to send to
+		// Params[0] = URL to send to
 
-        HttpURLConnection httpConnect;
-        URL url;
+		HttpURLConnection httpConnect;
+		URL url;
 
-        try {
+		try {
 
-            url = new URL(params[0]);
+			url = new URL(params[0]);
 
-            try {
+			try {
 
-                // set up the connection
-                httpConnect = (HttpURLConnection) url.openConnection();
-                httpConnect.setDoOutput(true);
-                httpConnect.setDoInput(true);
-                httpConnect.setInstanceFollowRedirects(false);
-                httpConnect.setChunkedStreamingMode(0);
+				// Set up the connection
+				httpConnect = (HttpURLConnection) url.openConnection();
+				httpConnect.setDoOutput(true);
+				httpConnect.setDoInput(true);
+				httpConnect.setInstanceFollowRedirects(false);
+				httpConnect.setChunkedStreamingMode(0);
 
-                try {
+				try {
 
-                    httpConnect.setRequestMethod("POST");
-                    httpConnect.setUseCaches(false);
+					httpConnect.setRequestMethod("POST");
+					httpConnect.setUseCaches(false);
 
-                    // write params[1] to the output stream
-                    DataOutputStream wr = new DataOutputStream(httpConnect.getOutputStream());
-                    wr.writeBytes(params[1]);
-                    wr.flush();
-                    wr.close();
+					// Write params[1] to the output stream
+					DataOutputStream wr = new DataOutputStream(httpConnect.getOutputStream());
+					wr.writeBytes(params[1]);
+					wr.flush();
+					wr.close();
 
-                    String line;
-                    String response = "";
+					String line;
+					String response = "";
 
-                    try {
+					try {
 
-                        // get response from server
-                        InputStream responseStream = new BufferedInputStream(httpConnect.getInputStream());
-                        BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                        StringBuilder stringBuilder = new StringBuilder();
-                        while ((line = responseStreamReader.readLine()) != null)
-                            stringBuilder.append(line);
-                        responseStreamReader.close();
+						// Get response from server
+						InputStream responseStream = new BufferedInputStream(httpConnect.getInputStream());
+						BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+						StringBuilder stringBuilder = new StringBuilder();
+						while ((line = responseStreamReader.readLine()) != null)
+							stringBuilder.append(line);
+						responseStreamReader.close();
 
-                        response = stringBuilder.toString();
-                    } catch ( FileNotFoundException e ) {
-                        Log.e("Error",e.toString());
-                    }
+						response = stringBuilder.toString();
+					} catch ( FileNotFoundException e ) {
+						Log.e("Error",e.toString());
+					}
 
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        // got the json object with stuff in it
-                    } catch (JSONException je) {
-                        Log.e("Error",je.toString());
-                    }
+					try {
+						JSONObject jsonResponse = new JSONObject(response);
+						// Got the json object with stuff in it
+					} catch (JSONException je) {
+						Log.e("Error",je.toString());
+					}
 
-                } catch (ProtocolException e) {
-                    Log.e("Error", e.toString());
-                } finally {
+				} catch (ProtocolException e) {
+					Log.e("Error", e.toString());
+				} finally {
 
-                    httpConnect.disconnect();
+					httpConnect.disconnect();
 
-                }
+				}
 
-            } catch (MalformedURLException e) {
-                Log.e("Error", e.toString());
-            }
-        } catch (IOException e) {
-            Log.e("Error", e.toString());
-        }
+			} catch (MalformedURLException e) {
+				Log.e("Error", e.toString());
+			}
+		} catch (IOException e) {
+			Log.e("Error", e.toString());
+		}
 
-        return null;
-    }
+		return null;
+	}
 }

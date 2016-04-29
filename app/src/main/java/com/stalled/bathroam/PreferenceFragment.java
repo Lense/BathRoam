@@ -2,6 +2,11 @@ package com.stalled.bathroam;
 
 import android.os.Bundle;
 
+/*
+ * Not much to do here. Preferences are loaded from XML resource. Android
+ * handles the rest!
+ */
+
 public class PreferenceFragment extends android.preference.PreferenceFragment {
 
 	public PreferenceFragment() {

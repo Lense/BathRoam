@@ -25,8 +25,11 @@ public class RatingDialog extends DialogFragment {
 		builder.setView(view);
 
 		mBathroomID = getArguments().getString("id");
+		// Grab hold of the rating bars
 		mNovelty = (RatingBar) view.findViewById(R.id.rateNovel);
 		mCleanliness = (RatingBar) view.findViewById(R.id.rateClean);
+
+		// "CLICKY CLICKY OKAY BUTTON"
 		builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
@@ -39,9 +42,11 @@ public class RatingDialog extends DialogFragment {
 				Toast.makeText(getActivity(), "Rating submitted!", Toast.LENGTH_LONG).show();
 			}
 		});
+
+		// "CLICKY CLICKY BYE-BYE BUTTON"
 		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				// canceled
+				// Canceled dialogue
 			}
 		});
 		builder.setTitle("Submit Rating");

@@ -12,12 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/*
+ * Had to create this fragment to hold the other fragment, cuz you know...
+ * Android. This goes in the Preference Drawer in Main Activity
+ */
+
 public class PreferenceDrawerFragment extends Fragment {
 	private ActionBarDrawerToggle mDrawerToggle;
-	private  DrawerLayout mDrawerLayout;
-	private  View mFragmentContainerView;
-	private  boolean mFromSavedInstanceState;
+	private DrawerLayout mDrawerLayout;
+	private View mFragmentContainerView;
+	private boolean mFromSavedInstanceState;
 
+	// Empty constructor
 	public PreferenceDrawerFragment() {
 	}
 
@@ -37,6 +43,8 @@ public class PreferenceDrawerFragment extends Fragment {
 						Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_preference_drawer, container, false);
 
+		// A little redundant but we might need it later.
+
 		return rootView;
 	}
 
@@ -53,7 +61,7 @@ public class PreferenceDrawerFragment extends Fragment {
 		mDrawerToggle = new ActionBarDrawerToggle(
 			   getActivity(),                    /* host Activity */
 			   mDrawerLayout,                    /* DrawerLayout object */
-			   R.drawable.ic_cast_light,             /* nav drawer image to replace 'Up' caret */
+			   R.drawable.ic_cast_light,         /* nav drawer image to replace 'Up' caret */
 			   R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
 			   R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
 		) {
@@ -73,6 +81,7 @@ public class PreferenceDrawerFragment extends Fragment {
 				}
 			}
 		};
+
 		// Defer code dependent on restoration of previous instance state.
 		mDrawerLayout.post(new Runnable() {
 			@Override

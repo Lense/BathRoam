@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements
     private ArrayList<Bathroom> mLocalBathrooms = new ArrayList<Bathroom>();
     private GoogleMap mMap;
 
-    // Will added this
 	private com.stalled.bathroam.PreferenceDrawerFragment mPreferenceDrawerFragment;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private LinearLayout mToolbar;
@@ -413,6 +412,7 @@ public class MainActivity extends AppCompatActivity implements
         RequestHandler.getInstance().addToReqQueue(jsObjReq, "jreq", getApplicationContext());
     }
 
+    // set elements of the preference drawer
     private void updatePreferences(){
         mPrefClass = mPreferences.getString("class", "none");
         mPrefGender = mPreferences.getString("gender", "none");
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK)
             switch (requestCode) {
-                case 0:
+                case 0: // receive data returning from NewBathroomActivity
                     try {
                         Toast.makeText(this, "Thank you for your submission!",
                                 Toast.LENGTH_LONG).show();

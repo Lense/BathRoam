@@ -19,9 +19,12 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+// Takes in a string to upload to the server in the form of POST data
 public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
     @Override
     protected Void doInBackground(String... params) {
+
+        // params[0] = URL to send to
 
         HttpURLConnection httpConnect;
         URL url;
@@ -32,6 +35,7 @@ public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
 
             try {
 
+                // set up the connection
                 httpConnect = (HttpURLConnection) url.openConnection();
                 httpConnect.setDoOutput(true);
                 httpConnect.setDoInput(true);
@@ -43,6 +47,7 @@ public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
                     httpConnect.setRequestMethod("POST");
                     httpConnect.setUseCaches(false);
 
+                    // write params[1] to the output stream
                     DataOutputStream wr = new DataOutputStream(httpConnect.getOutputStream());
                     wr.writeBytes(params[1]);
                     wr.flush();
@@ -53,6 +58,7 @@ public class UploadBathroomTask extends AsyncTask<String,Void,Void> {
 
                     try {
 
+                        // get response from server
                         InputStream responseStream = new BufferedInputStream(httpConnect.getInputStream());
                         BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
                         StringBuilder stringBuilder = new StringBuilder();

@@ -94,7 +94,7 @@ public class DrilldownActivity extends AppCompatActivity {
 
 	   ActionBar ab = getSupportActionBar();
 	   ab.setDisplayHomeAsUpEnabled(true);
-	   ab.setDisplayShowTitleEnabled(false);
+	   ab.setDisplayShowTitleEnabled(false);z
 
 	   // Build the URL for the request
 	   Uri.Builder builder = new Uri.Builder();
@@ -226,7 +226,7 @@ public class DrilldownActivity extends AppCompatActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK)
-            switch (requestCode) {
+            switch (requestCode) {n
 			  case 0:
 				  Bundle extras = data.getExtras();
 				  Bitmap imageBitmap = (Bitmap) extras.get("data");

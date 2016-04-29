@@ -118,6 +118,7 @@ public class Bathroom {
         return mContraceptive;
     }
 
+    // generate a bathroom object based on an incoming JSON file from server
     public void setDetails(JSONObject details) throws JSONException {
         JSONArray loc = details.getJSONArray("loc");
         mID = details.getInt("id");
@@ -143,6 +144,7 @@ public class Bathroom {
         mComplete = true;
     }
 
+    // comparison operator for the Bathroom class
     @Override
     public boolean equals(Object o) {
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements
 	private LatLng mLastLocation;
 	private Bathroom mNearestBathroom;
 	private HashMap<String, Bathroom> mBathroomMap;
+	private BitmapDescriptor mMarker;
 
 	private LinearLayout mToolbar;
 
@@ -217,6 +221,9 @@ public class MainActivity extends AppCompatActivity implements
 			});
 		}
 
+		// Store the marker bitmap
+		mMarker = BitmapDescriptorFactory.fromResource(R.drawable.marker);
+
 		updatePreferences();
 	}
 
@@ -326,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements
 							if(rating >= mMinRating){
 								Marker tmp = mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
 								mBathroomMap.put(tmp.getId(), newBathroom);
+								tmp.setIcon(mMarker);
 							}
 
 
@@ -394,6 +402,8 @@ public class MainActivity extends AppCompatActivity implements
 
 					Marker tmp = mMap.addMarker(new MarkerOptions().position(loc).title(String.format("%.1f", rating)));
 					mBathroomMap.put(tmp.getId(), mNearestBathroom);
+					tmp.setIcon(mMarker);
+					tmp.showInfoWindow();
 					CameraPosition newCamPos = new CameraPosition(loc,
 							mMap.getCameraPosition().zoom,
 							mMap.getCameraPosition().tilt, //use old tilt

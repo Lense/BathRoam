@@ -121,7 +121,7 @@ public class Bathroom {
 	public boolean getBaby() {
 		return mBaby;
 	}
-	public int getUrinals() {
+	public int getUrinals() {
 		return mUrinals;
 	}
 	public boolean getFeminine() {

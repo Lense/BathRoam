@@ -95,7 +95,7 @@ public class DrilldownActivity extends AppCompatActivity {
 
 		ActionBar ab = getSupportActionBar();
 		ab.setDisplayHomeAsUpEnabled(true);
-		ab.setDisplayShowTitleEnabled(false);z
+		ab.setDisplayShowTitleEnabled(false);
 
 		// Build the URL for the request
 		Uri.Builder builder = new Uri.Builder();

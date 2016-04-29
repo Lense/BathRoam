@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements
 	    mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 	    mPreferenceDrawerFragment.setUp( R.id.preference_drawer, mDrawerLayout);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        updatePreferences();
 
 	    mDrawerToggle = new ActionBarDrawerToggle( this, mDrawerLayout, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 		    public void onDrawerClosed(View view) {
@@ -215,6 +214,8 @@ public class MainActivity extends AppCompatActivity implements
                 }
             });
         }
+
+        updatePreferences();
     }
 
 

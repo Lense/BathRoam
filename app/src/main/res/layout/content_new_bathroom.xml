@@ -213,28 +213,6 @@
                 android:checked="false"
                 android:layout_marginBottom="12dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Floor"
-                    android:id="@+id/labelFloor"
-                    android:layout_weight="1" />
-
-                <NumberPicker
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:id="@+id/floorPicker"
-                    android:layout_centerInParent="true"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

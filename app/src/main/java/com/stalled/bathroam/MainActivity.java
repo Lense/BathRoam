@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements
 
 					// Only display bathrooms meeting the minimum rating requirement
 					mMap.clear();
+					mBathroomMap.clear();
 					for (int i = 0; i < mLocalBathrooms.size(); i++) {
 						Bathroom bathroom = mLocalBathrooms.get(i);
 
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements
 									.title(String.valueOf(rating))
 							);
 							tmp.setIcon(mMarker);
+							mBathroomMap.put(tmp.getId(), bathroom);
 						}
 					}
 				}

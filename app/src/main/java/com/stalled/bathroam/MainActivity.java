@@ -172,10 +172,11 @@ public class MainActivity extends AppCompatActivity implements
 						}
 
 						if (rating >= mMinRating) {
-							mMap.addMarker(new MarkerOptions()
+							Marker tmp = mMap.addMarker(new MarkerOptions()
 									.position(bathroom.getLocation())
 									.title(String.valueOf(rating))
 							);
+							tmp.setIcon(mMarker);
 						}
 					}
 				}

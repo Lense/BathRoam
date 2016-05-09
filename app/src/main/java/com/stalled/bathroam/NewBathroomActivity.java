@@ -35,10 +35,10 @@ public class NewBathroomActivity extends AppCompatActivity {
 				R.id.urinalsNumberPicker
 		};
 		int[] mins = new int[] {
-			1, 1, 0, 0
+			0, 0, 0, 0
 		};
 		int[] maxs = new int[] {
-			1000, 1000, 1000, 1000
+			200, 200, 200, 200
 		};
 		for (int i=0;i<4;++i) {
 			NumberPicker np = (NumberPicker) findViewById(ids[i]);

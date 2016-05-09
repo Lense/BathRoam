@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 23
-	buildToolsVersion "23.0.2"
+	buildToolsVersion "23.0.3"
 
 	defaultConfig {
 		applicationId "com.stalled.bathroam"
@@ -17,6 +17,20 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
+	signingConfigs {
+        release {
+            storeFile file("../my-release-key.keystore")
+            storePassword System.getenv("BATHROAMKEYPASSWORD")
+            keyAlias "alias_name"
+            keyPassword System.getenv("BATHROAMKEYPASSWORD")
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
 }
 
 dependencies {

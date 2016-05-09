@@ -2,7 +2,7 @@
 
 ##Installation instructions
 ###Android app
-- Download APK
+- [Download APK][http://toilets.lense.su/BathRoam.apk]
 - Enable installation of apps from sources other than the Play Store
 - Install APK
 
@@ -15,7 +15,7 @@
   - SQLAlchemy
   - uWSGI
   - SQL
-- Update BathRoam/config.py with database user and password
+- Update `BathRoam/config.py` with database user and password
 - Run `uwsgi --ini uwsgi.ini` from the server directory
 
 ##API Spec

@@ -2,7 +2,7 @@
 
 ##Installation instructions
 ###Android app
-- [Download APK][http://toilets.lense.su/BathRoam.apk]
+- [Download APK](http://toilets.lense.su/BathRoam.apk)
 - Enable installation of apps from sources other than the Play Store
 - Install APK
 

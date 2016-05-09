@@ -2,7 +2,11 @@
 
 
 ## Api Spec
-Draft 3.2
+Draft 4
+###Downloads
+####Current version signed apk
+`GET /BathRoam.apk`
+
 ###Get information
 ####Get all bathrooms
 `GET /api/bathrooms/all`
@@ -11,7 +15,7 @@ Draft 3.2
 	{
 		"id": <int>,
 		"loc": [<float>, <float>],
-		"cleanliness": <float>
+		"cleanliness": <float>,
 		"novelty": <float>
 	},
 	...
@@ -25,6 +29,7 @@ id=<int>
 ```
 ```json
 {
+	"id": <int>,
 	"loc": [<float>, <float>],
 	"class": <str>,
 	"gender": <str>,
@@ -42,7 +47,7 @@ id=<int>
 	"urinals": <int>,
 	"feminine": <bool>,
 	"medicine": <bool>,
-	"contraceptive": <bool>,
+	"contraceptive": <bool>
 }
 ```
 
@@ -56,7 +61,7 @@ lon=<float>
 {
 	"id": <int>,
 	"loc": [<float>, <float>],
-	"cleanliness": <float>
+	"cleanliness": <float>,
 	"novelty": <float>
 }
 ```
@@ -68,17 +73,69 @@ ne_lat=<float>
 ne_lon=<float>
 sw_lat=<float>
 sw_lon=<float>
+class=<str>
+gender=<str>
+public=<bool>
+paper=<bool>
+dryers=<bool>
+handicap=<bool>
+sanitizer=<bool>
+baby=<bool>
+feminine=<bool>
+medicine=<bool>
+contraceptive=<bool>
 ```
 ```json
 [
 	{
 		"id": <int>,
 		"loc": [<float>, <float>],
-		"cleanliness": <float>
+		"cleanliness": <float>,
 		"novelty": <float>
 	},
 	...
 ]
+```
+
+####Get all bathrooms
+`GET /api/ratings/all`
+```json
+[
+	{
+		"rating_id": <int>,
+		"bathroom_id": <int>,
+		"mac_address": rr.mac_address,
+		"cleanliness": <float>,
+		"novelty": <float>
+	},
+	...
+]
+
+```
+
+####Get all images
+`GET /api/bathrooms/images/all`
+```json
+[
+	{
+		"image_id": <int>,
+		"bathroom_id": <int>,
+		"image": <base64>
+	},
+	...
+]
+```
+
+####Get image
+```
+GET /api/bathrooms/<int>/images
+```
+```json
+{
+	"image_id": <int>,
+	"bathroom_id": <int>,
+	"image": <base64>
+}
 ```
 
 ###Send information
@@ -118,6 +175,18 @@ bathroom_id=<int>
 mac_address=<str>
 novelty=<float>
 cleanliness=<float>
+```
+```json
+{
+	"id": <int>
+}
+```
+
+####Submit an image
+```
+POST /api/bathrooms/images/create
+bathroom_id=<int>
+image=<base64>
 ```
 ```json
 {

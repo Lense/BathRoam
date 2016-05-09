@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 
 from BathRoam.dbClasses import db, Bathroom, Rating, Image
@@ -15,6 +15,11 @@ def create_app(config="BathRoam.config"):
 		@app.errorhandler(404)
 		def not_found(error):
 			return make_response(jsonify({'error': 'Not found'}), 404)
+
+		@app.route('/BathRoam.apk')
+		def download():
+			print("here")
+			return send_from_directory(directory='files', filename="bathroam_1.01.apk", mimetype="application/vnd.android.package-archive")
 
 		@app.route('/')
 		def index():

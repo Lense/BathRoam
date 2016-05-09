@@ -5,14 +5,15 @@
 - Download APK
 - Enable installation of apps from sources other than the Play Store
 - Install APK
+
 ###Server
 - Clone the repository
 - Install dependencies
-  - nginx
-  - python3
-  - python3-flask
-  - sqlalchemy
-  - uwsgi
+  - Nginx
+  - Python3
+  - Flask
+  - SQLAlchemy
+  - uWSGI
   - SQL
 - Update BathRoam/config.py with database user and password
 - Run `uwsgi --ini uwsgi.ini` from the server directory

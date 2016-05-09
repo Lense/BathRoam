@@ -1,10 +1,26 @@
-# StalledDevelopment
+#BathRoam by Stalled Development
 
+##Installation instructions
+###Android app
+- Download APK
+- Enable installation of apps from sources other than the Play Store
+- Install APK
+###Server
+- Clone the repository
+- Install dependencies
+  - nginx
+  - python3
+  - python3-flask
+  - sqlalchemy
+  - uwsgi
+  - SQL
+- Update BathRoam/config.py with database user and password
+- Run `uwsgi --ini uwsgi.ini` from the server directory
 
-## Api Spec
+##API Spec
 Draft 4
 ###Downloads
-####Current version signed apk
+####Current version signed APK
 `GET /BathRoam.apk`
 
 ###Get information
